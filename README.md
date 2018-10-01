@@ -16,3 +16,7 @@ composer global require geozhur/gendiff
 ```
 gendiff
 ```
+
+1. gendiff
+
+[![asciicast](https://asciinema.org/a/2ZRHRdqonXSBEVSlKwJJ18Uw3.png)](https://asciinema.org/a/2ZRHRdqonXSBEVSlKwJJ18Uw3)
