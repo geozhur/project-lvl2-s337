@@ -20,3 +20,7 @@ gendiff
 1. gendiff
 
 [![asciicast](https://asciinema.org/a/2ZRHRdqonXSBEVSlKwJJ18Uw3.png)](https://asciinema.org/a/2ZRHRdqonXSBEVSlKwJJ18Uw3)
+
+2. gendiff + JSON
+
+[![asciicast](https://asciinema.org/a/bOfbSTn36qrrSx1HU5M0NTjPl.png)](https://asciinema.org/a/bOfbSTn36qrrSx1HU5M0NTjPl)
