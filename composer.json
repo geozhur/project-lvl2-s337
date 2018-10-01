@@ -17,9 +17,13 @@
     },
     "autoload": {
         "files": [
-            "src/Cli.php"
+            "src/Cli.php",
+            "src/lib/Json.php",
+            "src/lib/Yaml.php"
         ],
         "psr-4": {
+            "GenDiff\\Yaml\\": "lib\\Yaml.php",
+            "GenDiff\\Json\\": "lib\\Json.php",
             "GenDiff\\": "src",
             "GenDiff\\Tests\\": "tests"
         }
@@ -31,7 +35,8 @@
     "prefer-stable": true,
     "require": {
         "docopt/docopt": "^1.0",
-        "wp-cli/php-cli-tools": "^0.11.10"
+        "wp-cli/php-cli-tools": "^0.11.10",
+        "symfony/yaml": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "*",
