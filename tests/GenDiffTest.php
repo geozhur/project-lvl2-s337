@@ -26,7 +26,7 @@ class GenDiffTest extends TestCase
         
         $diff = \GenDiff\Json\genDiff($pathToFile1, $pathToFile2);
 
-        $result = "{\n   host: hexlet.io\n + timeout: 20\n - timeout: 50\n - proxy: 123.234.53.22\n + verbose: true\n}";
+        $result = "{\n    host: hexlet.io\n  + timeout: 20\n  - timeout: 50\n  - proxy: 123.234.53.22\n  + verbose: true\n}";
 
         $this->assertEquals($diff, $result);
     }
@@ -57,7 +57,7 @@ YAML;
 
         $diff = \GenDiff\Yaml\genDiff($pathToFile1, $pathToFile2);
 
-        $result = "{\n   host: hexlet.io\n + timeout: 20\n - timeout: 50\n - proxy: 123.234.53.22\n + verbose: true\n}";
+        $result = "{\n    host: hexlet.io\n  + timeout: 20\n  - timeout: 50\n  - proxy: 123.234.53.22\n  + verbose: true\n}";
 
         $this->assertEquals($diff, $result);
     }

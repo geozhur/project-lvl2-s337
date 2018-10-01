@@ -6,7 +6,7 @@ use function \GenDiff\Common\encode as encode;
 
 function getYamlContents($pathToFile)
 {
-    return Yaml::parseFile($pathToFile);
+    print_r(Yaml::parseFile($pathToFile, Yaml::PARSE_OBJECT_FOR_MAP));
 }
 
 function genDiff($pathToFile1, $pathToFile2)
