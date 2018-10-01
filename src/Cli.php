@@ -72,6 +72,6 @@ function run()
     $result = Docopt::handle(HELP, array('version' => '2.0.0'));
 
     line();
-    print_r(genDiff('files/'.$result->args['<firstFile>'], 'files/'.$result->args['<secondFile>']));
+    print_r(genDiff($result->args['<firstFile>'], $result->args['<secondFile>']));
     line();
 }
