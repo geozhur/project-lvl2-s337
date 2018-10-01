@@ -1,21 +1,11 @@
 <?php
 namespace GenDiff\Json;
 
+use function \GenDiff\Common\encode as encode;
+
 function getJSONContents($pathToFile)
 {
     return json_decode(file_get_contents($pathToFile), true);
-}
-
-function encodeJSON($data)
-{
-    switch (gettype($data)) {
-        case 'NULL':
-            return 'null';
-        case 'boolean':
-            return ($data ? 'true' : 'false');
-        default:
-            return $data;
-    }
 }
 
 function genDiff($pathToFile1, $pathToFile2)
@@ -28,13 +18,13 @@ function genDiff($pathToFile1, $pathToFile2)
     $result1 = array_reduce($contentKeys1, function ($acc, $item) use ($content1, $content2) {
         if (array_key_exists($item, $content2)) {
             if ($content1[$item] == $content2[$item]) {
-                $acc[] = sprintf("    %s: %s", $item, encodeJSON($content1[$item]));
+                $acc[] = sprintf("    %s: %s", $item, encode($content1[$item]));
             } else {
-                $acc[] = sprintf("  + %s: %s", $item, encodeJSON($content2[$item]));
-                $acc[] = sprintf("  - %s: %s", $item, encodeJSON($content1[$item]));
+                $acc[] = sprintf("  + %s: %s", $item, encode($content2[$item]));
+                $acc[] = sprintf("  - %s: %s", $item, encode($content1[$item]));
             }
         } else {
-            $acc[] = sprintf("  - %s: %s", $item, encodeJSON($content1[$item]));
+            $acc[] = sprintf("  - %s: %s", $item, encode($content1[$item]));
         }
 
         return $acc;
@@ -42,7 +32,7 @@ function genDiff($pathToFile1, $pathToFile2)
 
     $result = implode("\n", array_reduce($contentKeys2, function ($acc, $item) use ($content1, $content2) {
         if (!array_key_exists($item, $content1)) {
-            $acc[] = sprintf("  + %s: %s", $item, encodeJSON($content2[$item]));
+            $acc[] = sprintf("  + %s: %s", $item, encode($content2[$item]));
         }
         return $acc;
     }, $result1));

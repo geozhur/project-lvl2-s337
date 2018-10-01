@@ -18,12 +18,14 @@
     "autoload": {
         "files": [
             "src/Cli.php",
+            "src/Common.php",
             "src/lib/Json.php",
             "src/lib/Yaml.php"
         ],
         "psr-4": {
             "GenDiff\\Yaml\\": "lib\\Yaml.php",
             "GenDiff\\Json\\": "lib\\Json.php",
+            "GenDiff\\Common\\": "lib\\Common.php",
             "GenDiff\\": "src",
             "GenDiff\\Tests\\": "tests"
         }

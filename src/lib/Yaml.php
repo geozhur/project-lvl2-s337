@@ -2,22 +2,11 @@
 namespace GenDiff\Yaml;
 
 use Symfony\Component\Yaml\Yaml;
+use function \GenDiff\Common\encode as encode;
 
 function getYamlContents($pathToFile)
 {
     return Yaml::parseFile($pathToFile);
-}
-
-function encode($data)
-{
-    switch (gettype($data)) {
-        case 'NULL':
-            return 'null';
-        case 'boolean':
-            return ($data ? 'true' : 'false');
-        default:
-            return $data;
-    }
 }
 
 function genDiff($pathToFile1, $pathToFile2)
