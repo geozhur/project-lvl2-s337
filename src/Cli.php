@@ -18,8 +18,7 @@ DOC;
 
 
 function run()
-{
-    
+{  
     $result = Docopt::handle(HELP, array('version' => '1.0.0'));
     array_map(function($key, $item) {
         echo $key.': '.json_encode($item).PHP_EOL;
