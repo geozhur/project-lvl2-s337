@@ -1,0 +1,32 @@
+{
+    "name": "geozhur/gendiff",
+    "description": "Training hexlet project",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Geogry Zhuravlev",
+            "email": "egorich2004@mail.ru"
+        }
+    ],
+    "scripts": {
+        "phpcs": "phpcs"
+    },
+    "autoload": {
+        "files": [
+            "src/Cli.php"
+        ]
+    },
+    "bin": [
+        "bin/gendiff"
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "docopt/docopt": "^1.0",
+        "wp-cli/php-cli-tools": "^0.11.10"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "*"
+    }
+}
