@@ -18,8 +18,8 @@ Options:
     --format <fmt>                Report format [default: pretty]
 DOC;
     
-    $result = Docopt::handle($doc, array('version'=>'1.0.0'));
-    foreach ($result as $k=>$v) {
+    $result = Docopt::handle($doc, array('version' => '1.0.0'));
+    foreach ($result as $k => $v) {
         echo $k.': '.json_encode($v).PHP_EOL;
     }
 }
