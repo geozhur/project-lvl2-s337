@@ -3,9 +3,7 @@ namespace GenDiff\Cli;
 
 use Docopt;
 
-function run()
-{
-    $doc = <<<DOC
+const HELP = <<<DOC
     
 Generate diff
     
@@ -17,9 +15,13 @@ Options:
     -h --help                     Show this screen
     --format <fmt>                Report format [default: pretty]
 DOC;
+
+
+function run()
+{
     
-    $result = Docopt::handle($doc, array('version' => '1.0.0'));
-    foreach ($result as $k => $v) {
-        echo $k.': '.json_encode($v).PHP_EOL;
-    }
+    $result = Docopt::handle(HELP, array('version' => '1.0.0'));
+    array_map(function($key, $item) {
+        echo $key.': '.json_encode($item).PHP_EOL;
+    }, array_keys($result), $result);
 }
