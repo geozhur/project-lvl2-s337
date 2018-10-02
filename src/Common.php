@@ -22,7 +22,7 @@ function toStr($spaces, $elem, $key, $value)
 
 function toNode($level, $elem, $key, $value, $children = [])
 {
-    $node = new \stdClass();//create a new
+    $node = new \stdClass();
     $node->key = $key;
     $node->status = $elem;
     $node->level=$level;
