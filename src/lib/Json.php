@@ -10,5 +10,5 @@ function getJSONContents($pathToFile)
 
 function genDiff($pathToFile1, $pathToFile2)
 {
-    return(\GenDiff\Common\genDiff(getJSONContents($pathToFile1), getJSONContents($pathToFile2), 1));
+    return(\GenDiff\Common\checkFileExtAndDiff($pathToFile1, $pathToFile2));
 }

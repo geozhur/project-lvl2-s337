@@ -10,5 +10,5 @@ function getYamlContents($pathToFile)
 
 function genDiff($pathToFile1, $pathToFile2)
 {
-    return(\GenDiff\Common\genDiff(getYamlContents($pathToFile1), getYamlContents($pathToFile2), 1));
+    return(\GenDiff\Common\checkFileExtAndDiff($pathToFile1, $pathToFile2));
 }

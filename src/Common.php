@@ -20,32 +20,47 @@ function toStr($spaces, $elem, $key, $value)
     return sprintf("%{$spaces}s %s: %s", $elem, $key, $value);
 }
 
-function genDiff($content1, $content2, $level)
+function toNode($level, $elem, $key, $value, $children = [])
+{
+    $node = new \stdClass();//create a new
+    $node->key = $key;
+    $node->status = $elem;
+    $node->level=$level;
+
+    if (!empty($children)) {
+        $node->children = $children;
+    } else {
+        $node->value = $value;
+    }
+
+    return $node;
+}
+
+function genAstDiff($content1, $content2, $level)
 {
     $contentArr1 = get_object_vars($content1);
     $contentKeys1 = array_keys($contentArr1);
     $contentArr2 = get_object_vars($content2);
     $contentKeys2 = array_keys($contentArr2);
-    $spaces = $level*4-1;
-    $result1 = Collection\flattenAll(array_map(function ($item) use ($contentArr1, $contentArr2, $level, $spaces) {
+    $result1 = Collection\flattenAll(array_map(function ($item) use ($contentArr1, $contentArr2, $level) {
         $value1 = $contentArr1[$item];
         if (array_key_exists($item, $contentArr2)) {
             $value2 = $contentArr2[$item];
             if (is_object($value1)) {
-                return toStr($spaces, '', $item, genDiff($value1, $value2, $level+1));
+                return toNode($level, '', $item, '', genAstDiff($value1, $value2, $level+1));
             } else {
                 if ($value1 == $value2) {
-                        return toStr($spaces, '', $item, encode($value1));
+                        return toNode($level, '', $item, encode($value1));
                 } else {
-                        return [toStr($spaces, '-', $item, encode($value1)),
-                                toStr($spaces, '+', $item, encode($value2))];
+                        return [toNode($level, '-', $item, encode($value1)),
+                                toNode($level, '+', $item, encode($value2))];
                 }
             }
         } else {
             if (!is_object($value1)) {
-                return toStr($spaces, '-', $item, encode($value1));
+                return toNode($level, '-', $item, encode($value1));
             } else {
-                return toStr($spaces, '-', $item, genDiff($value1, $value1, $level+1));
+                return toNode($level, '-', $item, '', genAstDiff($value1, $value1, $level+1));
             }
         }
     }, $contentKeys1));
@@ -53,15 +68,39 @@ function genDiff($content1, $content2, $level)
     $result2 = array_map(function ($item) use ($contentArr2, $spaces, $level) {
         $value3 = $contentArr2[$item];
         if (!is_object($value3)) {
-            return toStr($spaces, '+', $item, encode($value3));
+            return toNode($level, '+', $item, encode($value3));
         } else {
-            return toStr($spaces, '+', $item, genDiff($value3, $value3, $level+1));
+            return toNode($level, '+', $item, '', genAstDiff($value3, $value3, $level+1));
         }
     }, array_diff($contentKeys2, $contentKeys1));
 
-    $result = implode("\n", array_merge($result1, $result2));
-    $spaces2 = $spaces - 2;
-    return  sprintf("%s\n%s\n%{$spaces2}s", '{', $result, '}');
+    $result = array_merge($result1, $result2);
+    return  $result;
+}
+
+function printTreeIter($ast)
+{
+    $result2 = Collection\flattenAll(array_map(function ($item) {
+        if (!is_array($item->children)) {
+            return toStr($item->level*4-1, $item->status, $item->key, $item->value);
+        } else {
+            $spaces = $item->level*4+1;
+            return toStr(
+                $item->level*4-1,
+                $item->status,
+                $item->key,
+                sprintf("%s\n%s\n%{$spaces}s", '{', printTreeIter($item->children), '}')
+            ) ;
+        }
+    }, $ast));
+
+    $result= implode("\n", $result2);
+    return  $result;
+}
+
+function printTree($ast)
+{
+    return sprintf("%s\n%s\n%s", '{', printTreeIter($ast), '}');
 }
 
 function getContentForExt($file)
@@ -80,5 +119,5 @@ function getContentForExt($file)
 
 function checkFileExtAndDiff($pathToFile1, $pathToFile2)
 {
-    return(\GenDiff\Common\genDiff(getContentForExt($pathToFile1), getContentForExt($pathToFile2), 1));
+    return(printTree((genAstDiff(getContentForExt($pathToFile1), getContentForExt($pathToFile2), 1))));
 }
