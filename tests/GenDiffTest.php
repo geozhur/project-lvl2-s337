@@ -21,10 +21,10 @@ class GenDiffTest extends TestCase
             }'
         ];
   
-        $this->file_system = vfsStream::setup('root', 444, $files);
+        $this->fileSystem = vfsStream::setup('root', 444, $files);
 
-        $pathToFile1 = $this->file_system->url() . '/before.json';
-        $pathToFile2 = $this->file_system->url() . '/after.json';
+        $pathToFile1 = $this->fileSystem->url() . '/before.json';
+        $pathToFile2 = $this->fileSystem->url() . '/after.json';
         
         $diff = \GenDiff\Json\genDiff($pathToFile1, $pathToFile2);
 
@@ -60,10 +60,10 @@ YAML;
             'after.yaml' => $yaml2
         ];
 
-        $this->file_system = vfsStream::setup('root', 444, $files);
+        $this->fileSystem = vfsStream::setup('root', 444, $files);
 
-        $pathToFile1 = $this->file_system->url() . '/before.yaml';
-        $pathToFile2 = $this->file_system->url() . '/after.yaml';
+        $pathToFile1 = $this->fileSystem->url() . '/before.yaml';
+        $pathToFile2 = $this->fileSystem->url() . '/after.yaml';
 
         $diff = \GenDiff\Yaml\genDiff($pathToFile1, $pathToFile2);
 
