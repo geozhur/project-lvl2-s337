@@ -28,3 +28,8 @@ gendiff
 3. gendiff + Yaml
 
 [![asciicast](https://asciinema.org/a/iwQuxlgIHWTDFu2He57bvKZXL.png)](https://asciinema.org/a/iwQuxlgIHWTDFu2He57bvKZXL)
+
+4. gendiff + Yaml + JSON
+
+[![asciicast](https://asciinema.org/a/QWP9bKR59d82DoKudBgTayTFv.png)](https://asciinema.org/a/QWP9bKR59d82DoKudBgTayTFv)
+
