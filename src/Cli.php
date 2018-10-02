@@ -19,21 +19,12 @@ DOC;
 
 function run()
 {
-    $result = Docopt::handle(HELP, array('version' => '2.0.0'));
+    $result = Docopt::handle(HELP, array('version' => '4.0.0'));
 
     $firstFile = $result->args['<firstFile>'];
     $secondFile = $result->args['<secondFile>'];
-    $firstFileExt = pathinfo($firstFile, PATHINFO_EXTENSION);
-    $secondFileExt = pathinfo($secondFile, PATHINFO_EXTENSION);
+
     line();
-    switch ($firstFileExt) {
-        case 'json':
-            line(Json\genDiff($firstFile, $secondFile));
-            break;
-        case 'yaml':
-            line(Yaml\genDiff($firstFile, $secondFile));
-            break;
-        default:
-    }
+    line(Common\checkFileExtAndDiff($firstFile, $secondFile));
     line();
 }

@@ -38,7 +38,8 @@
     "require": {
         "docopt/docopt": "^1.0",
         "wp-cli/php-cli-tools": "^0.11.10",
-        "symfony/yaml": "*"
+        "symfony/yaml": "*",
+        "funct/funct": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "*",

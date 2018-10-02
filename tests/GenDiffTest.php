@@ -2,80 +2,48 @@
 namespace GenDiff\Tests;
 
 use \PHPUnit\Framework\TestCase;
-use org\bovigo\vfs\vfsStream;
 
 class GenDiffTest extends TestCase
 {
     public function testGenDiffJson()
     {
-        $files = [
-            'before.json' => '{
-              "host": "hexlet.io",
-              "timeout": 50,
-              "proxy": "123.234.53.22"
-            }',
-            'after.json' => '{
-              "timeout": 20,
-              "verbose": true,
-              "host": "hexlet.io"
-            }'
-        ];
-  
-        $this->fileSystem = vfsStream::setup('root', 444, $files);
-
-        $pathToFile1 = $this->fileSystem->url() . '/before.json';
-        $pathToFile2 = $this->fileSystem->url() . '/after.json';
+        $before = __DIR__ . "/files/before.json";
+        $after = __DIR__ . "/files/after.json";
+        $correctDiff = __DIR__ . "/files/correctdiff.json";
+        $testDiff = __DIR__ . "/files/testdiff.json";
         
-        $diff = \GenDiff\Json\genDiff($pathToFile1, $pathToFile2);
+        $correctResult = file_get_contents($correctDiff);
+        file_put_contents($testDiff, \GenDiff\Json\genDiff($before, $after));
+        $diff = file_get_contents($testDiff);
 
-        $result = <<<TEXT
-{
-    host: hexlet.io
-  + timeout: 20
-  - timeout: 50
-  - proxy: 123.234.53.22
-  + verbose: true
-}
-TEXT;
+        $this->assertEquals($diff, $correctResult);
+    }
 
-        $this->assertEquals($diff, $result);
+    public function testGenDiffJson2()
+    {
+        $before = __DIR__ . "/files/before2.json";
+        $after = __DIR__ . "/files/after2.json";
+        $correctDiff = __DIR__ . "/files/correctdiff2.json";
+        $testDiff = __DIR__ . "/files/testdiff2.json";
+        
+        $correctResult = file_get_contents($correctDiff);
+        file_put_contents($testDiff, \GenDiff\Json\genDiff($before, $after));
+        $diff = file_get_contents($testDiff);
+
+        $this->assertEquals($diff, $correctResult);
     }
 
     public function testGenDiffYaml()
     {
-        $yaml1 = <<<YAML
-host: hexlet.io
-timeout: 50
-proxy: 123.234.53.22
-YAML;
+        $before = __DIR__ . "/files/before.yaml";
+        $after = __DIR__ . "/files/after.yaml";
+        $correctDiff = __DIR__ . "/files/correctdiff.yaml";
+        $testDiff = __DIR__ . "/files/testdiff.yaml";
         
-        $yaml2 = <<<YAML
-timeout: 20
-verbose: true
-host: hexlet.io
-YAML;
+        $correctResult = file_get_contents($correctDiff);
+        file_put_contents($testDiff, \GenDiff\Yaml\genDiff($before, $after));
+        $diff = file_get_contents($testDiff);
 
-        $files = [
-            'before.yaml' => $yaml1,
-            'after.yaml' => $yaml2
-        ];
-
-        $this->fileSystem = vfsStream::setup('root', 444, $files);
-
-        $pathToFile1 = $this->fileSystem->url() . '/before.yaml';
-        $pathToFile2 = $this->fileSystem->url() . '/after.yaml';
-
-        $diff = \GenDiff\Yaml\genDiff($pathToFile1, $pathToFile2);
-
-        $result = <<<TEXT
-{
-    host: hexlet.io
-  + timeout: 20
-  - timeout: 50
-  - proxy: 123.234.53.22
-  + verbose: true
-}
-TEXT;
-        $this->assertEquals($diff, $result);
+        $this->assertEquals($diff, $correctResult);
     }
 }
