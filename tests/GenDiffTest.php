@@ -1,7 +1,9 @@
 <?php
 namespace GenDiff\Tests;
+
 use \PHPUnit\Framework\TestCase;
 use org\bovigo\vfs\vfsStream;
+
 class GenDiffTest extends TestCase
 {
     public function testGenDiffJson()
@@ -26,7 +28,15 @@ class GenDiffTest extends TestCase
         
         $diff = \GenDiff\Json\genDiff($pathToFile1, $pathToFile2);
 
-        $result = "{\n    host: hexlet.io\n  + timeout: 20\n  - timeout: 50\n  - proxy: 123.234.53.22\n  + verbose: true\n}";
+        $result = <<<TEXT
+{
+    host: hexlet.io
+  + timeout: 20
+  - timeout: 50
+  - proxy: 123.234.53.22
+  + verbose: true
+}
+TEXT;
 
         $this->assertEquals($diff, $result);
     }
@@ -57,8 +67,15 @@ YAML;
 
         $diff = \GenDiff\Yaml\genDiff($pathToFile1, $pathToFile2);
 
-        $result = "{\n    host: hexlet.io\n  + timeout: 20\n  - timeout: 50\n  - proxy: 123.234.53.22\n  + verbose: true\n}";
-
+        $result = <<<TEXT
+{
+    host: hexlet.io
+  + timeout: 20
+  - timeout: 50
+  - proxy: 123.234.53.22
+  + verbose: true
+}
+TEXT;
         $this->assertEquals($diff, $result);
     }
 }
