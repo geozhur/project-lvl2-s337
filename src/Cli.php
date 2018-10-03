@@ -26,6 +26,6 @@ function run()
     $format = $result->args['--format'];
 
     line();
-    line(Common\genDiff($firstFile, $secondFile, $format));
+    line(Differ\genDiff($firstFile, $secondFile, $format));
     line();
 }
