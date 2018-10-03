@@ -23,8 +23,9 @@ function run()
 
     $firstFile = $result->args['<firstFile>'];
     $secondFile = $result->args['<secondFile>'];
+    $format = $result->args['--format'];
 
     line();
-    line(Common\checkFileExtAndDiff($firstFile, $secondFile));
+    line(Common\genDiff($firstFile, $secondFile, $format));
     line();
 }

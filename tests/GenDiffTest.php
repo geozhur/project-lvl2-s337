@@ -13,7 +13,7 @@ class GenDiffTest extends TestCase
         $testDiff = __DIR__ . "/files/testdiff.json";
         
         $correctResult = file_get_contents($correctDiff);
-        file_put_contents($testDiff, \GenDiff\Json\genDiff($before, $after));
+        file_put_contents($testDiff, \GenDiff\Common\genDiff($before, $after));
         $diff = file_get_contents($testDiff);
 
         $this->assertEquals($diff, $correctResult);
@@ -27,7 +27,7 @@ class GenDiffTest extends TestCase
         $testDiff = __DIR__ . "/files/testdiff2.json";
         
         $correctResult = file_get_contents($correctDiff);
-        file_put_contents($testDiff, \GenDiff\Json\genDiff($before, $after));
+        file_put_contents($testDiff, \GenDiff\Common\genDiff($before, $after));
         $diff = file_get_contents($testDiff);
 
         $this->assertEquals($diff, $correctResult);
@@ -41,7 +41,7 @@ class GenDiffTest extends TestCase
         $testDiff = __DIR__ . "/files/testdiff.yaml";
         
         $correctResult = file_get_contents($correctDiff);
-        file_put_contents($testDiff, \GenDiff\Yaml\genDiff($before, $after));
+        file_put_contents($testDiff, \GenDiff\Common\genDiff($before, $after));
         $diff = file_get_contents($testDiff);
 
         $this->assertEquals($diff, $correctResult);
