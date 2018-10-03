@@ -78,29 +78,28 @@ function genAstDiff($content1, $content2, $level)
     return  $result;
 }
 
-function printTreeIter($ast)
+function printTreeIter($begin, $ast, $end)
 {
-    $result2 = Collection\flattenAll(array_map(function ($item) {
+    $result = Collection\flattenAll(array_map(function ($item) use ($begin, $end) {
         if (!is_array($item->children)) {
             return toStr($item->level*4-1, $item->status, $item->key, $item->value);
         } else {
-            $spaces = $item->level*4+1;
+            $tree = printTreeIter($begin,$item->children,"    $end");
             return toStr(
                 $item->level*4-1,
                 $item->status,
                 $item->key,
-                sprintf("%s\n%s\n%{$spaces}s", '{', printTreeIter($item->children), '}')
+                $tree
             ) ;
         }
     }, $ast));
 
-    $result= implode("\n", $result2);
-    return  $result;
+    return implode("\n", array_merge([$begin], $result, [$end]));
 }
 
 function printTree($ast)
 {
-    return sprintf("%s\n%s\n%s", '{', printTreeIter($ast), '}');
+    return printTreeIter('{',$ast,'}');
 }
 
 function getContentForExt($file)
