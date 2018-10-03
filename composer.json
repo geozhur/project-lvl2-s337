@@ -18,13 +18,9 @@
     "autoload": {
         "files": [
             "src/Cli.php",
-            "src/Common.php"
-        ],
-        "psr-4": {
-            "GenDiff\\Common\\": "lib\\Common.php",
-            "GenDiff\\": "src",
-            "GenDiff\\Tests\\": "tests"
-        }
+            "src/Parse.php",
+            "src/Differ.php"
+        ]
     },
     "bin": [
         "bin/gendiff"

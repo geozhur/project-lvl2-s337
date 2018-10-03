@@ -13,7 +13,7 @@ class GenDiffTest extends TestCase
         $testDiff = __DIR__ . "/files/testdiff.json";
         
         $correctResult = file_get_contents($correctDiff);
-        file_put_contents($testDiff, \GenDiff\Common\genDiff($before, $after));
+        file_put_contents($testDiff, \GenDiff\Differ\genDiff($before, $after));
         $diff = file_get_contents($testDiff);
 
         $this->assertEquals($diff, $correctResult);
@@ -27,7 +27,7 @@ class GenDiffTest extends TestCase
         $testDiff = __DIR__ . "/files/testdiff2.json";
         
         $correctResult = file_get_contents($correctDiff);
-        file_put_contents($testDiff, \GenDiff\Common\genDiff($before, $after));
+        file_put_contents($testDiff, \GenDiff\Differ\genDiff($before, $after));
         $diff = file_get_contents($testDiff);
 
         $this->assertEquals($diff, $correctResult);
@@ -41,8 +41,22 @@ class GenDiffTest extends TestCase
         $testDiff = __DIR__ . "/files/testdiff.yaml";
         
         $correctResult = file_get_contents($correctDiff);
-        file_put_contents($testDiff, \GenDiff\Common\genDiff($before, $after));
+        file_put_contents($testDiff, \GenDiff\Differ\genDiff($before, $after));
         $diff = file_get_contents($testDiff);
+
+        $this->assertEquals($diff, $correctResult);
+    }
+
+    public function testGenDiffPlane()
+    {
+        $before = __DIR__ . "/files/before2.json";
+        $after = __DIR__ . "/files/after2.json";
+        $correctDiffPlane = __DIR__ . "/files/correctPlaneDiff.json";
+        $testDiffPlane = __DIR__ . "/files/testPlaneDiff.json";
+        
+        $correctResult = file_get_contents($correctDiffPlane);
+        file_put_contents($testDiffPlane, \GenDiff\Differ\genDiff($before, $after, 'plane'));
+        $diff = file_get_contents($testDiffPlane);
 
         $this->assertEquals($diff, $correctResult);
     }
