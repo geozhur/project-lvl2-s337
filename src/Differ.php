@@ -147,7 +147,7 @@ function genDiff($pathToFile1, $pathToFile2, $format = 'pretty')
         return "File not found or failed to parse";
     }
     $astDiff = genAstDiff($contentForExt1, $contentForExt2);
-    if ($format === 'plane') {
+    if ($format === 'plain') {
         return getPlane($astDiff);
     }
     $tree = getTree($astDiff);

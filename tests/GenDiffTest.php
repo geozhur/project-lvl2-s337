@@ -55,7 +55,7 @@ class GenDiffTest extends TestCase
         $testDiffPlane = __DIR__ . "/files/testPlaneDiff.json";
         
         $correctResult = file_get_contents($correctDiffPlane);
-        file_put_contents($testDiffPlane, \GenDiff\Differ\genDiff($before, $after, 'plane'));
+        file_put_contents($testDiffPlane, \GenDiff\Differ\genDiff($before, $after, 'plain'));
         $diff = file_get_contents($testDiffPlane);
 
         $this->assertEquals($diff, $correctResult);
