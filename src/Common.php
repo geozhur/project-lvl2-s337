@@ -80,8 +80,12 @@ function genAstDiff($content1, $content2, $level)
 
 function printTreeIter($begin, $ast, $end)
 {
+    if (empty($ast)) {
+        return '';
+    }
+    
     $result = Collection\flattenAll(array_map(function ($item) use ($begin, $end) {
-        if (!is_array($item->children)) {
+        if (isset($item->children) && !is_array($item->children)) {
             return toStr($item->level*4-1, $item->status, $item->key, $item->value);
         } else {
             $tree = printTreeIter($begin, $item->children, "    $end");
