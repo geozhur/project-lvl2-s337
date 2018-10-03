@@ -33,3 +33,8 @@ gendiff
 
 [![asciicast](https://asciinema.org/a/QWP9bKR59d82DoKudBgTayTFv.png)](https://asciinema.org/a/QWP9bKR59d82DoKudBgTayTFv)
 
+5. gendiff --format plain before.json after.json
+
+[![asciicast](https://asciinema.org/a/5YgaWfIHpqV08GniL0uSoD4eW.png)](https://asciinema.org/a/5YgaWfIHpqV08GniL0uSoD4eW)
+
+
