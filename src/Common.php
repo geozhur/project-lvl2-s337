@@ -84,7 +84,7 @@ function printTreeIter($begin, $ast, $end)
         if (!is_array($item->children)) {
             return toStr($item->level*4-1, $item->status, $item->key, $item->value);
         } else {
-            $tree = printTreeIter($begin,$item->children,"    $end");
+            $tree = printTreeIter($begin, $item->children, "    $end");
             return toStr(
                 $item->level*4-1,
                 $item->status,
@@ -99,7 +99,7 @@ function printTreeIter($begin, $ast, $end)
 
 function printTree($ast)
 {
-    return printTreeIter('{',$ast,'}');
+    return printTreeIter('{', $ast, '}');
 }
 
 function getContentForExt($file)
