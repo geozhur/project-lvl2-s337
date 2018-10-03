@@ -65,7 +65,7 @@ function genAstDiff($content1, $content2, $level)
         }
     }, $contentKeys1));
 
-    $result2 = array_map(function ($item) use ($contentArr2, $spaces, $level) {
+    $result2 = array_map(function ($item) use ($contentArr2, $level) {
         $value3 = $contentArr2[$item];
         if (!is_object($value3)) {
             return toNode($level, '+', $item, encode($value3));
@@ -85,12 +85,7 @@ function printTreeIter($begin, $ast, $end)
             return toStr($item->level*4-1, $item->status, $item->key, $item->value);
         } else {
             $tree = printTreeIter($begin, $item->children, "    $end");
-            return toStr(
-                $item->level*4-1,
-                $item->status,
-                $item->key,
-                $tree
-            ) ;
+            return toStr($item->level*4-1, $item->status, $item->key, $tree);
         }
     }, $ast));
 
