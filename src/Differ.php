@@ -32,7 +32,7 @@ function genAstDiff($content1, $content2)
     $contentKeys2 = array_keys($contentArr2);
     $contentKeys = array_unique(array_merge($contentKeys1, $contentKeys2));
 
-    $result = Collection\flattenAll(array_map(function ($item) use ($contentArr1, $contentArr2, $level) {
+    $result = Collection\flattenAll(array_map(function ($item) use ($contentArr1, $contentArr2) {
         if (array_key_exists($item, $contentArr1) && array_key_exists($item, $contentArr2)) {
             $value1 = $contentArr1[$item];
             $value2 = $contentArr2[$item];
