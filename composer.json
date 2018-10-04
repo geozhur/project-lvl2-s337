@@ -18,7 +18,7 @@
     "autoload": {
         "files": [
             "src/Cli.php",
-            "src/Parse.php",
+            "src/Content.php",
             "src/Differ.php"
         ]
     },

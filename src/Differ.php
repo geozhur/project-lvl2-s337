@@ -83,7 +83,7 @@ function getStatusForTree($status)
 function getTree($ast)
 {
     $getTreeIter = function ($begin, $ast, $end, $spaces) use (&$getTreeIter) {
-        $result = Collection\flattenAll(array_map(function ($item) use ($begin, $end, $spaces, &$getTreeIter) {
+        $result = array_map(function ($item) use ($begin, $end, $spaces, &$getTreeIter) {
             $status = getStatusForTree($item->status);
             if (!isset($item->children) || !is_array($item->children)) {
                 return "{$spaces}{$status} {$item->key}: {$item->value}";
@@ -91,7 +91,7 @@ function getTree($ast)
                 $tree = $getTreeIter($begin, $item->children, "    {$end}", "    {$spaces}");
                 return "{$spaces}{$status} {$item->key}: {$tree}";
             }
-        }, $ast));
+        }, $ast);
     
         return implode("\n", array_merge([$begin], $result, [$end]));
     };
@@ -149,28 +149,44 @@ function getJson($ast)
                     }
                     return "{$spaces}\"{$elem}\": \"{$itemArr[$elem]}\"";
                 }, $itemKeys);
-            return implode("\n", array_merge(["{$spaces}{"], [implode(",\n", $node)], ["{$spaces}}"]));
+            $strNode = implode(",\n", $node);
+            return "{$spaces}{\n{$strNode}\n{$spaces}}";
         }, $ast);
      
-        return implode("\n", array_merge([$begin], [implode(",\n", array_merge($result))], [$end]));
+        $strResult = implode(",\n", array_merge($result));
+        return "{$begin}\n{$strResult}\n{$end}";
     };
     return $getJsonIter('[', $ast, ']', "   ");
 }
 
 function genDiff($pathToFile1, $pathToFile2, $format = 'pretty')
 {
-    $contentForExt1 = \GenDiff\Parse\parse($pathToFile1);
-    $contentForExt2 = \GenDiff\Parse\parse($pathToFile2);
+
+    $content1 = file_get_contents($pathToFile1);
+    $content2 = file_get_contents($pathToFile2);
+
+    if (!$content1 || !$content2) {
+        return "File not found or not read";
+    }
+
+    $extension1 = pathinfo($pathToFile1, PATHINFO_EXTENSION);
+    $extension2 = pathinfo($pathToFile2, PATHINFO_EXTENSION);
+
+    $contentForExt1 = \GenDiff\Content\parse($content1, $extension1);
+    $contentForExt2 = \GenDiff\Content\parse($content2, $extension2);
+
     if (!$contentForExt1 || !$contentForExt2) {
-        return "File not found or failed to parse";
+        return "File not json or not yaml";
     }
+
     $astDiff = genAstDiff($contentForExt1, $contentForExt2);
-    if ($format === 'plain') {
-        return getPlain($astDiff);
+
+    switch ($format) {
+        case 'plain':
+            return getPlain($astDiff);
+        case 'json':
+            return getJson($astDiff);
+        default:
+            return getTree($astDiff);
     }
-    if ($format === 'json') {
-        return getJson($astDiff);
-    }
-    $tree = getTree($astDiff);
-    return $tree;
 }
