@@ -1,0 +1,127 @@
+[
+    {
+        "key": "common",
+        "status": "",
+        "value": "",
+        "oldValue": "",
+        "children": [
+            {
+                "key": "setting1",
+                "status": "",
+                "value": "Value 1",
+                "oldValue": "",
+                "children": ""
+            },
+            {
+                "key": "setting2",
+                "status": "remove",
+                "value": "200",
+                "oldValue": "",
+                "children": ""
+            },
+            {
+                "key": "setting3",
+                "status": "",
+                "value": "true",
+                "oldValue": "",
+                "children": ""
+            },
+            {
+                "key": "setting6",
+                "status": "remove",
+                "value": "",
+                "oldValue": "",
+                "children": [
+                    {
+                        "key": "key",
+                        "status": "",
+                        "value": "value",
+                        "oldValue": "",
+                        "children": ""
+                    }
+                ]
+            },
+            {
+                "key": "setting4",
+                "status": "add",
+                "value": "blah blah",
+                "oldValue": "",
+                "children": ""
+            },
+            {
+                "key": "setting5",
+                "status": "add",
+                "value": "",
+                "oldValue": "",
+                "children": [
+                    {
+                        "key": "key5",
+                        "status": "",
+                        "value": "value5",
+                        "oldValue": "",
+                        "children": ""
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "key": "group1",
+        "status": "",
+        "value": "",
+        "oldValue": "",
+        "children": [
+            {
+                "key": "baz",
+                "status": "from",
+                "value": "bas",
+                "oldValue": "bars",
+                "children": ""
+            },
+            {
+                "key": "baz",
+                "status": "to",
+                "value": "bars",
+                "oldValue": "bas",
+                "children": ""
+            },
+            {
+                "key": "foo",
+                "status": "",
+                "value": "bar",
+                "oldValue": "",
+                "children": ""
+            }
+        ]
+    },
+    {
+        "key": "group2",
+        "status": "remove",
+        "value": "",
+        "oldValue": "",
+        "children": [
+            {
+                "key": "abc",
+                "status": "",
+                "value": "12345",
+                "oldValue": "",
+                "children": ""
+            }
+        ]
+    },
+    {
+        "key": "group3",
+        "status": "add",
+        "value": "",
+        "oldValue": "",
+        "children": [
+            {
+                "key": "fee",
+                "status": "",
+                "value": "100500",
+                "oldValue": "",
+                "children": ""
+            }
+        ]
+    }
+]

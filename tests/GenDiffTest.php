@@ -60,4 +60,24 @@ class GenDiffTest extends TestCase
 
         $this->assertEquals($diff, $correctResult);
     }
+
+    public function testGenDiffToJson()
+    {
+        $before = __DIR__ . "/files/before2.json";
+        $after = __DIR__ . "/files/after2.json";
+         $correctDiffPlane = __DIR__ . "/files/correctJsonDiff.json";
+         $testDiffJson = __DIR__ . "/files/testJsonDiff.json";
+        
+       // $correctResult = file_get_contents($correctDiffPlane);
+
+        file_put_contents($testDiffJson, \GenDiff\Differ\genDiff($before, $after, 'json'));
+        $this->assertJsonFileEqualsJsonFile(
+            $correctDiffPlane,
+            $testDiffJson
+        );
+
+       // $diff = file_get_contents($testDiffPlane);
+
+       // $this->assertEquals($diff, $correctResult);
+    }
 }

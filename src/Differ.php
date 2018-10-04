@@ -15,17 +15,16 @@ function encode($data)
     }
 }
 
-function toNode($level, $status, $key, $value, $children = '', $oldValue = '')
+function toNode($status, $key, $value, $children = '', $oldValue = '')
 {
         return (object)['key' => $key,
                         'status' => $status,
-                        'level' => $level,
                         'value' => $value,
                         'oldValue' => $oldValue,
                         'children' => $children];
 }
 
-function genAstDiff($content1, $content2, $level = 1)
+function genAstDiff($content1, $content2)
 {
     $contentArr1 = get_object_vars($content1);
     $contentArr2 = get_object_vars($content2);
@@ -38,28 +37,28 @@ function genAstDiff($content1, $content2, $level = 1)
             $value1 = $contentArr1[$item];
             $value2 = $contentArr2[$item];
             if (is_object($value1)) {
-                return toNode($level, '', $item, '', genAstDiff($value1, $value2, $level+1));
+                return toNode('', $item, '', genAstDiff($value1, $value2));
             } else {
                 if ($value1 == $value2) {
-                        return toNode($level, '', $item, encode($value1));
+                        return toNode('', $item, encode($value1));
                 } else {
-                        return [toNode($level, 'from', $item, encode($value1), '', encode($value2)),
-                                toNode($level, 'to', $item, encode($value2), '', encode($value1))];
+                        return [toNode('from', $item, encode($value1), '', encode($value2)),
+                                toNode('to', $item, encode($value2), '', encode($value1))];
                 }
             }
         } elseif (array_key_exists($item, $contentArr1) && !array_key_exists($item, $contentArr2)) {
             $value3 = $contentArr1[$item];
             if (!is_object($value3)) {
-                return toNode($level, 'remove', $item, encode($value3));
+                return toNode('remove', $item, encode($value3));
             } else {
-                return toNode($level, 'remove', $item, '', genAstDiff($value3, $value3, $level+1));
+                return toNode('remove', $item, '', genAstDiff($value3, $value3));
             }
         } else {
             $value4 = $contentArr2[$item];
             if (!is_object($value4)) {
-                return toNode($level, 'add', $item, encode($value4));
+                return toNode('add', $item, encode($value4));
             } else {
-                return toNode($level, 'add', $item, '', genAstDiff($value4, $value4, $level+1));
+                return toNode('add', $item, '', genAstDiff($value4, $value4));
             }
         }
     }, $contentKeys));
@@ -83,22 +82,20 @@ function getStatusForTree($status)
 
 function getTree($ast)
 {
-    $getTreeIter = function ($begin, $ast, $end) use (&$getTreeIter) {
-        $result = Collection\flattenAll(array_map(function ($item) use ($begin, $end, &$getTreeIter) {
-            $numSpaces = $item->level*4-2;
-            $spaces = str_repeat(' ', $numSpaces);
+    $getTreeIter = function ($begin, $ast, $end, $spaces) use (&$getTreeIter) {
+        $result = Collection\flattenAll(array_map(function ($item) use ($begin, $end, $spaces, &$getTreeIter) {
             $status = getStatusForTree($item->status);
             if (!isset($item->children) || !is_array($item->children)) {
                 return "{$spaces}{$status} {$item->key}: {$item->value}";
             } else {
-                $tree = $getTreeIter($begin, $item->children, "    $end");
+                $tree = $getTreeIter($begin, $item->children, "    {$end}", "    {$spaces}");
                 return "{$spaces}{$status} {$item->key}: {$tree}";
             }
         }, $ast));
     
         return implode("\n", array_merge([$begin], $result, [$end]));
     };
-    return $getTreeIter('{', $ast, '}');
+    return $getTreeIter('{', $ast, '}', '  ');
 }
 
 function getPlane($ast)
@@ -139,6 +136,28 @@ function getPlane($ast)
     return implode("\n", $getPlaneIter($ast, ''));
 }
 
+function getJson($ast)
+{
+    $getTreeIter = function ($begin, $ast, $end, $spaces) use (&$getTreeIter) {
+        $result = array_map(function ($item) use ($begin, $end, $spaces, &$getTreeIter) {
+            $status = getStatusForTree($item->status);
+            $itemArr = (array)$item;
+            $itemKeys =  array_keys($itemArr);
+                $node = array_map(function ($elem) use ($spaces, $itemArr, $begin, $end, &$getTreeIter) {
+                    if ($elem ==='children' && is_array($itemArr[$elem])) {
+                        $tree = $getTreeIter($begin, $itemArr[$elem], "    {$end}", "    {$spaces}");
+                        return "{$spaces}\"{$elem}\": {$tree}";
+                    }
+                    return "{$spaces}\"{$elem}\": \"{$itemArr[$elem]}\"";
+                }, $itemKeys);
+            return implode("\n", array_merge(["{$spaces}{"], [implode(",\n", $node)], ["{$spaces}}"]));
+        }, $ast);
+     
+        return implode("\n", array_merge([$begin], [implode(",\n", array_merge($result))], [$end]));
+    };
+    return $getTreeIter('[', $ast, ']', "   ");
+}
+
 function genDiff($pathToFile1, $pathToFile2, $format = 'pretty')
 {
     $contentForExt1 = \GenDiff\Parse\parse($pathToFile1);
@@ -149,6 +168,9 @@ function genDiff($pathToFile1, $pathToFile2, $format = 'pretty')
     $astDiff = genAstDiff($contentForExt1, $contentForExt2);
     if ($format === 'plain') {
         return getPlane($astDiff);
+    }
+    if ($format === 'json') {
+        return getJson($astDiff);
     }
     $tree = getTree($astDiff);
     return $tree;
