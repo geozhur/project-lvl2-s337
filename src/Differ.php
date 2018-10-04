@@ -98,10 +98,10 @@ function getTree($ast)
     return $getTreeIter('{', $ast, '}', '  ');
 }
 
-function getPlane($ast)
+function getPlain($ast)
 {
-    $getPlaneIter = function ($ast, $path) use (&$getPlaneIter) {
-        $result = array_reduce($ast, function ($acc, $item) use ($path, &$getPlaneIter) {
+    $getPlainIter = function ($ast, $path) use (&$getPlainIter) {
+        $result = array_reduce($ast, function ($acc, $item) use ($path, &$getPlainIter) {
             if (!empty($item->status)) {
                 switch ($item->status) {
                     case 'from':
@@ -127,25 +127,24 @@ function getPlane($ast)
                 }
             }
             if (is_array($item->children)) {
-                return  array_merge($acc, $getPlaneIter($item->children, "{$path}{$item->key}."));
+                return  array_merge($acc, $getPlainIter($item->children, "{$path}{$item->key}."));
             }
             return $acc;
         }, []);
         return $result;
     };
-    return implode("\n", $getPlaneIter($ast, ''));
+    return implode("\n", $getPlainIter($ast, ''));
 }
 
 function getJson($ast)
 {
-    $getTreeIter = function ($begin, $ast, $end, $spaces) use (&$getTreeIter) {
-        $result = array_map(function ($item) use ($begin, $end, $spaces, &$getTreeIter) {
-            $status = getStatusForTree($item->status);
+    $getJsonIter = function ($begin, $ast, $end, $spaces) use (&$getJsonIter) {
+        $result = array_map(function ($item) use ($begin, $end, $spaces, &$getJsonIter) {
             $itemArr = (array)$item;
             $itemKeys =  array_keys($itemArr);
-                $node = array_map(function ($elem) use ($spaces, $itemArr, $begin, $end, &$getTreeIter) {
+                $node = array_map(function ($elem) use ($spaces, $itemArr, $begin, $end, &$getJsonIter) {
                     if ($elem ==='children' && is_array($itemArr[$elem])) {
-                        $tree = $getTreeIter($begin, $itemArr[$elem], "    {$end}", "    {$spaces}");
+                        $tree = $getJsonIter($begin, $itemArr[$elem], "    {$end}", "    {$spaces}");
                         return "{$spaces}\"{$elem}\": {$tree}";
                     }
                     return "{$spaces}\"{$elem}\": \"{$itemArr[$elem]}\"";
@@ -155,7 +154,7 @@ function getJson($ast)
      
         return implode("\n", array_merge([$begin], [implode(",\n", array_merge($result))], [$end]));
     };
-    return $getTreeIter('[', $ast, ']', "   ");
+    return $getJsonIter('[', $ast, ']', "   ");
 }
 
 function genDiff($pathToFile1, $pathToFile2, $format = 'pretty')
@@ -167,7 +166,7 @@ function genDiff($pathToFile1, $pathToFile2, $format = 'pretty')
     }
     $astDiff = genAstDiff($contentForExt1, $contentForExt2);
     if ($format === 'plain') {
-        return getPlane($astDiff);
+        return getPlain($astDiff);
     }
     if ($format === 'json') {
         return getJson($astDiff);

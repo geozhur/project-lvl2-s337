@@ -51,12 +51,12 @@ class GenDiffTest extends TestCase
     {
         $before = __DIR__ . "/files/before2.json";
         $after = __DIR__ . "/files/after2.json";
-        $correctDiffPlane = __DIR__ . "/files/correctPlaneDiff.json";
-        $testDiffPlane = __DIR__ . "/files/testPlaneDiff.json";
+        $correctDiffPlain = __DIR__ . "/files/correctPlaneDiff.json";
+        $testDiffPlain = __DIR__ . "/files/testPlaneDiff.json";
         
-        $correctResult = file_get_contents($correctDiffPlane);
-        file_put_contents($testDiffPlane, \GenDiff\Differ\genDiff($before, $after, 'plain'));
-        $diff = file_get_contents($testDiffPlane);
+        $correctResult = file_get_contents($correctDiffPlain);
+        file_put_contents($testDiffPlain, \GenDiff\Differ\genDiff($before, $after, 'plain'));
+        $diff = file_get_contents($testDiffPlain);
 
         $this->assertEquals($diff, $correctResult);
     }
@@ -67,17 +67,11 @@ class GenDiffTest extends TestCase
         $after = __DIR__ . "/files/after2.json";
          $correctDiffPlane = __DIR__ . "/files/correctJsonDiff.json";
          $testDiffJson = __DIR__ . "/files/testJsonDiff.json";
-        
-       // $correctResult = file_get_contents($correctDiffPlane);
 
         file_put_contents($testDiffJson, \GenDiff\Differ\genDiff($before, $after, 'json'));
         $this->assertJsonFileEqualsJsonFile(
             $correctDiffPlane,
             $testDiffJson
         );
-
-       // $diff = file_get_contents($testDiffPlane);
-
-       // $this->assertEquals($diff, $correctResult);
     }
 }
