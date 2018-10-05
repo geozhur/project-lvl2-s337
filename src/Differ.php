@@ -21,7 +21,7 @@ function node($type, $key, $value, $children = '', $newValue = '')
         return (object)['key' => $key,
                         'type' => $type,
                         'value' => $value,
-                        'newValue' => $newValue,                       
+                        'newValue' => $newValue,
                         'children' => $children];
 }
 
