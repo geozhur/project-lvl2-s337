@@ -18,8 +18,11 @@
     "autoload": {
         "files": [
             "src/Cli.php",
-            "src/Content.php",
-            "src/Differ.php"
+            "src/Parsers.php",
+            "src/Differ.php",
+            "src/Plain.php",
+            "src/Json.php",
+            "src/Tree.php"
         ]
     },
     "bin": [
