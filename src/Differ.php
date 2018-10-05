@@ -94,15 +94,12 @@ function genAstDiff($content1, $content2)
 
 function genDiff($pathToFile1, $pathToFile2, $format = 'pretty')
 {
-    try {
+
         if (file_exists($pathToFile1) && file_exists($pathToFile2)) {
             $content1 = file_get_contents($pathToFile1);
             $content2 = file_get_contents($pathToFile2);
         }
 
-        if (!$content1 || !$content2) {
-            throw new Exception('File not found or not read');
-        }
 
         $extension1 = pathinfo($pathToFile1, PATHINFO_EXTENSION);
         $extension2 = pathinfo($pathToFile2, PATHINFO_EXTENSION);
@@ -120,7 +117,4 @@ function genDiff($pathToFile1, $pathToFile2, $format = 'pretty')
             default:
                 return \Formatters\Tree\render($astDiff);
         }
-    } catch (Exception $e) {
-        echo "Error: " , $e->getMessage();
-    }
 }
