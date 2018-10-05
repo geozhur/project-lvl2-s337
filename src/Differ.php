@@ -27,8 +27,6 @@ function node($type, $key, $value, $children = '', $newValue = '')
 
 function checkType($arr1, $arr2, $key)
 {
-    $value1 = encode($arr1[$key]);
-    $value2 = encode($arr2[$key]);
 
     if (is_object($arr1[$key]) && is_object($arr2[$key])) {
         $func = function ($value1, $value2) {
@@ -38,21 +36,21 @@ function checkType($arr1, $arr2, $key)
     }
     if (array_key_exists($key, $arr1) && array_key_exists($key, $arr2)
                                       && $arr1[$key] === $arr2[$key]) {
-        return ['notChanged', $value1 ,function () {
+        return ['notChanged', encode($arr1[$key]) ,function () {
             return '';
         }, ''];
     }
 
     if (array_key_exists($key, $arr1) && array_key_exists($key, $arr2)
                                       && $arr1[$key]!== $arr2[$key]) {
-        return ['changed', $value1, function () {
+        return ['changed', encode($arr1[$key]), function () {
             return '';
-        }, $value2];
+        }, encode($arr2[$key])];
     }
 
     if (array_key_exists($key, $arr1) && !array_key_exists($key, $arr2)) {
         if (!is_object($arr1[$key])) {
-            return ['removed', $value1, function ($value1, $value2) {
+            return ['removed', encode($arr1[$key]), function ($value1, $value2) {
                 return '';
             }, ''];
         } else {
@@ -64,7 +62,7 @@ function checkType($arr1, $arr2, $key)
 
     if (!array_key_exists($key, $arr1) && array_key_exists($key, $arr2)) {
         if (!is_object($arr2[$key])) {
-            return ['add', $value2, function ($value1, $value2) {
+            return ['add', encode($arr2[$key]), function ($value1, $value2) {
                 return '';
             }, ''];
         } else {
