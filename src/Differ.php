@@ -28,7 +28,8 @@ function node($type, $key, $value, $children = '', $newValue = '')
 function checkType($arr1, $arr2, $key)
 {
 
-    if (is_object($arr1[$key]) && is_object($arr2[$key])) {
+    if (array_key_exists($key, $arr1) && array_key_exists($key, $arr2) 
+            &&is_object($arr1[$key]) && is_object($arr2[$key])) {
         $func = function ($value1, $value2) {
             return genAstDiff($value1, $value2);
         };
