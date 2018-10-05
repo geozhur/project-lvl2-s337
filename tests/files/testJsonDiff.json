@@ -3,34 +3,40 @@
    "key": "common",
    "type": "notChangedNode",
    "value": "",
+   "newValue": "",
    "children": [
        {
        "key": "setting1",
        "type": "notChanged",
        "value": "Value 1",
+       "newValue": "",
        "children": ""
        },
        {
        "key": "setting2",
        "type": "removed",
        "value": "200",
+       "newValue": "",
        "children": ""
        },
        {
        "key": "setting3",
        "type": "notChanged",
        "value": "true",
+       "newValue": "",
        "children": ""
        },
        {
        "key": "setting6",
        "type": "removedNode",
        "value": "",
+       "newValue": "",
        "children": [
            {
            "key": "key",
            "type": "notChanged",
            "value": "value",
+           "newValue": "",
            "children": ""
            }
         ]
@@ -39,17 +45,20 @@
        "key": "setting4",
        "type": "add",
        "value": "blah blah",
+       "newValue": "",
        "children": ""
        },
        {
        "key": "setting5",
        "type": "addNode",
        "value": "",
+       "newValue": "",
        "children": [
            {
            "key": "key5",
            "type": "notChanged",
            "value": "value5",
+           "newValue": "",
            "children": ""
            }
         ]
@@ -60,17 +69,20 @@
    "key": "group1",
    "type": "notChangedNode",
    "value": "",
+   "newValue": "",
    "children": [
        {
        "key": "baz",
        "type": "changed",
-       "value": [{ "0": "bas"},{ "0": "bars"}],
+       "value": "bas",
+       "newValue": "bars",
        "children": ""
        },
        {
        "key": "foo",
        "type": "notChanged",
        "value": "bar",
+       "newValue": "",
        "children": ""
        }
     ]
@@ -79,11 +91,13 @@
    "key": "group2",
    "type": "removedNode",
    "value": "",
+   "newValue": "",
    "children": [
        {
        "key": "abc",
        "type": "notChanged",
        "value": "12345",
+       "newValue": "",
        "children": ""
        }
     ]
@@ -92,11 +106,13 @@
    "key": "group3",
    "type": "addNode",
    "value": "",
+   "newValue": "",
    "children": [
        {
        "key": "fee",
        "type": "notChanged",
        "value": "100500",
+       "newValue": "",
        "children": ""
        }
     ]

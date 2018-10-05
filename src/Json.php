@@ -1,6 +1,13 @@
 <?php
 namespace Formatters\Json;
 
+/*
+function render($ast)
+{
+    return json_encode($ast, JSON_PRETTY_PRINT);
+}
+*/
+
 function render($ast)
 {
     $getJsonIter = function ($begin, $ast, $end, $spaces) use (&$getJsonIter) {
@@ -8,10 +15,6 @@ function render($ast)
             $itemArr = (array)$item;
             $itemKeys =  array_keys($itemArr);
                 $node = array_map(function ($elem) use ($spaces, $itemArr, $begin, $end, &$getJsonIter) {
-                    if ($elem ==='value' && is_array($itemArr[$elem])) {
-                        return "{$spaces}\"{$elem}\": [{ \"0\": \"{$itemArr[$elem][0]}\"},".
-                                "{ \"0\": \"{$itemArr[$elem][1]}\"}]";
-                    }
                     if ($elem ==='children' && is_array($itemArr[$elem])) {
                         $tree = $getJsonIter($begin, $itemArr[$elem], "    {$end}", "    {$spaces}");
                         return "{$spaces}\"{$elem}\": {$tree}";

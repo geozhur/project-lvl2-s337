@@ -1,111 +1,120 @@
 [
     {
-    "key": "common",
-    "type": "notChangedNode",
-    "value": "",
-    "children": [
-        {
-        "key": "setting1",
-        "type": "notChanged",
-        "value": "Value 1",
-        "children": ""
-        },
-        {
-        "key": "setting2",
-        "type": "removed",
-        "value": "200",
-        "children": ""
-        },
-        {
-        "key": "setting3",
-        "type": "notChanged",
-        "value": "true",
-        "children": ""
-        },
-        {
-        "key": "setting6",
-        "type": "removedNode",
+        "key": "common",
+        "type": "notChangedNode",
         "value": "",
+        "newValue": "",
         "children": [
             {
-            "key": "key",
-            "type": "notChanged",
-            "value": "value",
-            "children": ""
-            }
-         ]
-        },
-        {
-        "key": "setting4",
-        "type": "add",
-        "value": "blah blah",
-        "children": ""
-        },
-        {
-        "key": "setting5",
-        "type": "addNode",
-        "value": "",
-        "children": [
-            {
-            "key": "key5",
-            "type": "notChanged",
-            "value": "value5",
-            "children": ""
-            }
-         ]
-        }
-     ]
-    },
-    {
-    "key": "group1",
-    "type": "notChangedNode",
-    "value": "",
-    "children": [
-        {
-        "key": "baz",
-        "type": "changed",
-        "value": [
-            {
-            "0": "bas"
+                "key": "setting1",
+                "type": "notChanged",
+                "value": "Value 1",
+                "newValue": "",
+                "children": ""
             },
             {
-            "0": "bars"
+                "key": "setting2",
+                "type": "removed",
+                "value": "200",
+                "newValue": "",
+                "children": ""
+            },
+            {
+                "key": "setting3",
+                "type": "notChanged",
+                "value": "true",
+                "newValue": "",
+                "children": ""
+            },
+            {
+                "key": "setting6",
+                "type": "removedNode",
+                "value": "",
+                "newValue": "",
+                "children": [
+                    {
+                        "key": "key",
+                        "type": "notChanged",
+                        "value": "value",
+                        "newValue": "",
+                        "children": ""
+                    }
+                ]
+            },
+            {
+                "key": "setting4",
+                "type": "add",
+                "value": "blah blah",
+                "newValue": "",
+                "children": ""
+            },
+            {
+                "key": "setting5",
+                "type": "addNode",
+                "value": "",
+                "newValue": "",
+                "children": [
+                    {
+                        "key": "key5",
+                        "type": "notChanged",
+                        "value": "value5",
+                        "newValue": "",
+                        "children": ""
+                    }
+                ]
             }
-         ],
-        "children": ""
-        },
-        {
-        "key": "foo",
-        "type": "notChanged",
-        "value": "bar",
-        "children": ""
-        }
-     ]
+        ]
     },
     {
-    "key": "group2",
-    "type": "removedNode",
-    "value": "",
-    "children": [
-        {
-        "key": "abc",
-        "type": "notChanged",
-        "value": "12345",
-        "children": ""
-        }
-     ]
+        "key": "group1",
+        "type": "notChangedNode",
+        "value": "",
+        "newValue": "",
+        "children": [
+            {
+                "key": "baz",
+                "type": "changed",
+                "value": "bas",
+                "newValue": "bars",
+                "children": ""
+            },
+            {
+                "key": "foo",
+                "type": "notChanged",
+                "value": "bar",
+                "newValue": "",
+                "children": ""
+            }
+        ]
     },
     {
-    "key": "group3",
-    "type": "addNode",
-    "value": "",
-    "children": [
-        {
-        "key": "fee",
-        "type": "notChanged",
-        "value": "100500",
-        "children": ""
-        }
-     ]
+        "key": "group2",
+        "type": "removedNode",
+        "value": "",
+        "newValue": "",
+        "children": [
+            {
+                "key": "abc",
+                "type": "notChanged",
+                "value": "12345",
+                "newValue": "",
+                "children": ""
+            }
+        ]
+    },
+    {
+        "key": "group3",
+        "type": "addNode",
+        "value": "",
+        "newValue": "",
+        "children": [
+            {
+                "key": "fee",
+                "type": "notChanged",
+                "value": "100500",
+                "newValue": "",
+                "children": ""
+            }
+        ]
     }
- ]
+]

@@ -12,9 +12,9 @@ function parse($content, $format)
             case 'yaml':
                 return Yaml::parse($content, Yaml::PARSE_OBJECT_FOR_MAP);
             default:
-                return;
+                throw new Exception('Unable to parse the string');
         }
     } catch (ParseException $e) {
-        echo "Error: Unable to parse the string " , $e->getMessage();
+        echo "Error: " , $e->getMessage();
     }
 }

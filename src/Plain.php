@@ -10,7 +10,7 @@ function render($ast)
             switch ($item->type) {
                 case 'changed':
                     return "Property '{$path}{$item->key}' was changed. " .
-                           "From '{$item->value[0]}' to '{$item->value[1]}'\n";
+                           "From '{$item->value}' to '{$item->newValue}'\n";
                 case 'add':
                 case 'addNode':
                     $value = $item->value === '' ? 'complex value' : $item->value;

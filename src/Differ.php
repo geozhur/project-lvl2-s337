@@ -16,11 +16,12 @@ function encode($data)
     }
 }
 
-function node($type, $key, $value, $children = '')
+function node($type, $key, $value, $children = '', $newValue = '')
 {
         return (object)['key' => $key,
                         'type' => $type,
                         'value' => $value,
+                        'newValue' => $newValue,                       
                         'children' => $children];
 }
 
@@ -33,31 +34,31 @@ function checkType($arr1, $arr2, $key)
         $func = function ($value1, $value2) {
             return genAstDiff($value1, $value2);
         };
-        return ['notChangedNode', '', $func];
+        return ['notChangedNode', '', $func, ''];
     }
     if (array_key_exists($key, $arr1) && array_key_exists($key, $arr2)
                                       && $arr1[$key] === $arr2[$key]) {
         return ['notChanged', $value1 ,function () {
             return '';
-        }];
+        }, ''];
     }
 
     if (array_key_exists($key, $arr1) && array_key_exists($key, $arr2)
                                       && $arr1[$key]!== $arr2[$key]) {
-        return ['changed', [$value1, $value2], function () {
+        return ['changed', $value1, function () {
             return '';
-        }];
+        }, $value2];
     }
 
     if (array_key_exists($key, $arr1) && !array_key_exists($key, $arr2)) {
         if (!is_object($arr1[$key])) {
             return ['removed', $value1, function ($value1, $value2) {
                 return '';
-            }];
+            }, ''];
         } else {
             return ['removedNode', '', function ($value1, $value2) {
                 return genAstDiff($value1, $value1);
-            }];
+            }, ''];
         }
     }
 
@@ -65,11 +66,11 @@ function checkType($arr1, $arr2, $key)
         if (!is_object($arr2[$key])) {
             return ['add', $value2, function ($value1, $value2) {
                 return '';
-            }];
+            }, ''];
         } else {
             return ['addNode', '', function ($value1, $value2) {
                 return genAstDiff($value2, $value2);
-            }];
+            }, ''];
         }
     }
 }
@@ -84,8 +85,8 @@ function genAstDiff($content1, $content2)
     $result = Collection\flattenAll(array_map(function ($key) use ($contentArr1, $contentArr2) {
         $value1 = $contentArr1[$key];
         $value2 = $contentArr2[$key];
-        [$type, $value, $funcChild] = checkType($contentArr1, $contentArr2, $key);
-        return node($type, $key, $value, $funcChild($value1, $value2));
+        [$type, $value, $funcChild, $newValue] = checkType($contentArr1, $contentArr2, $key);
+        return node($type, $key, $value, $funcChild($value1, $value2), $newValue);
     }, $contentKeys));
 
     return  $result;

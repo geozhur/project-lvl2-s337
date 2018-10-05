@@ -31,7 +31,7 @@ function render($ast)
                 case 'add':
                     return "{$spaces}{$status} {$node->key}: {$node->value}";
                 case 'changed':
-                    return "{$spaces}- {$node->key}: {$node->value[0]}\n{$spaces}+ {$node->key}: {$node->value[1]}";
+                    return "{$spaces}- {$node->key}: {$node->value}\n{$spaces}+ {$node->key}: {$node->newValue}";
             }
         }, $ast);
     
