@@ -93,11 +93,11 @@ function genAstDiff($content1, $content2)
 
 function genDiff($pathToFile1, $pathToFile2, $format = 'pretty')
 {
-
-    if (file_exists($pathToFile1) && file_exists($pathToFile2)) {
-        $content1 = file_get_contents($pathToFile1);
-        $content2 = file_get_contents($pathToFile2);
-    }
+    try {
+        if (file_exists($pathToFile1) && file_exists($pathToFile2)) {
+            $content1 = file_get_contents($pathToFile1);
+            $content2 = file_get_contents($pathToFile2);
+        }
 
 
         $extension1 = pathinfo($pathToFile1, PATHINFO_EXTENSION);
@@ -108,12 +108,15 @@ function genDiff($pathToFile1, $pathToFile2, $format = 'pretty')
 
         $astDiff = genAstDiff($contentForExt1, $contentForExt2);
 
-    switch ($format) {
-        case 'plain':
-            return \Formatters\Plain\render($astDiff);
-        case 'json':
-            return \Formatters\Json\render($astDiff);
-        default:
-            return \Formatters\Tree\render($astDiff);
+        switch ($format) {
+            case 'plain':
+                return \Formatters\Plain\render($astDiff);
+            case 'json':
+                return \Formatters\Json\render($astDiff);
+            default:
+                return \Formatters\Tree\render($astDiff);
+        }
+    } catch (Exception $e) {
+        echo "Error: " , $e->getMessage();
     }
 }
