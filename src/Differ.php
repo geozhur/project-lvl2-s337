@@ -83,8 +83,8 @@ function genAstDiff($content1, $content2)
     $contentKeys2 = array_keys($contentArr2);
     $contentKeys = array_unique(array_merge($contentKeys1, $contentKeys2));
     $result = Collection\flattenAll(array_map(function ($key) use ($contentArr1, $contentArr2) {
-        $value1 = $contentArr1[$key];
-        $value2 = $contentArr2[$key];
+        $value1 = isset($contentArr1[$key]) ? $contentArr1[$key]: '';
+        $value2 = isset($contentArr2[$key]) ? $contentArr2[$key]: '';
         [$type, $value, $funcChild, $newValue] = checkType($contentArr1, $contentArr2, $key);
         return node($type, $key, $value, $funcChild($value1, $value2), $newValue);
     }, $contentKeys));
