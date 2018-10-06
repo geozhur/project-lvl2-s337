@@ -6,14 +6,7 @@ use Exception;
 
 function encode($data)
 {
-    switch (gettype($data)) {
-        case 'NULL':
-            return 'null';
-        case 'boolean':
-            return ($data ? 'true' : 'false');
-        default:
-            return $data;
-    }
+    return trim(json_encode($data), '" ');
 }
 
 function node($type, $key, $value, $children = '', $newValue = '')
