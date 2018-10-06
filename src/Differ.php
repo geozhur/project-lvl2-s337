@@ -31,7 +31,7 @@ function genAstDiff($content1, $content2)
         $keyInArr1 = array_key_exists($key, $arr1);
         $keyInArr2 = array_key_exists($key, $arr2);
 
-        if (is_set($arr1[$key]) && is_set($arr2[$key]) && is_object($arr1[$key]) && is_object($arr2[$key])) {
+        if (!empty($arr1[$key]) && !empty($arr2[$key]) && is_object($arr1[$key]) && is_object($arr2[$key])) {
             return node('node', $key, genAstDiff($arr1[$key], $arr2[$key]));
         }
         if ($keyInArr1 && $keyInArr2) {
