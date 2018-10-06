@@ -15,7 +15,7 @@ function render($ast)
             $itemArr = (array)$item;
             $itemKeys =  array_keys($itemArr);
                 $node = array_map(function ($elem) use ($spaces, $itemArr, $begin, $end, &$getJsonIter) {
-                    if ($elem ==='children' && is_array($itemArr[$elem])) {
+                    if ($elem ==='children' && $itemArr[$elem]) {
                         $tree = $getJsonIter($begin, $itemArr[$elem], "    {$end}", "    {$spaces}");
                         return "{$spaces}\"{$elem}\": {$tree}";
                     }
