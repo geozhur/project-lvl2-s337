@@ -9,7 +9,7 @@ function encode($data)
     return trim(json_encode($data), '" ');
 }
 
-function node($type, $key, $children = '',  $oldValue = '', $newValue = '')
+function node($type, $key, $children = '', $oldValue = '', $newValue = '')
 {
         return (object)['key' => $key,
                         'type' => $type,

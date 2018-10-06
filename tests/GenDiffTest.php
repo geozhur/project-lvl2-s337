@@ -57,5 +57,4 @@ class GenDiffTest extends TestCase
             $testDiffJson
         );
     }
-    
 }

@@ -43,9 +43,9 @@ function render($ast, $spaces = '')
 
             $node = array_map(function ($elem) use ($spaces, $type, $itemArr) {
                 if ($elem ==='children' && $type == 'node') {
-                    $tree = render($itemArr[$elem],"      {$spaces}");
+                    $tree = render($itemArr[$elem], "      {$spaces}");
                     return "    {$spaces}\"{$elem}\": {$tree}";
-                } 
+                }
                 if ($elem === 'newValue'&& $type == 'added') {
                     $newVal = stringify($itemArr[$elem], "    {$spaces}");
                     return "    {$spaces}\"{$elem}\": {$newVal}";
