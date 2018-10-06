@@ -19,13 +19,17 @@ DOC;
 
 function run()
 {
-    $result = Docopt::handle(HELP, array('version' => '4.0.0'));
+    try {
+        $result = Docopt::handle(HELP, array('version' => '4.0.0'));
 
-    $firstFile = $result->args['<firstFile>'];
-    $secondFile = $result->args['<secondFile>'];
-    $format = $result->args['--format'];
+        $firstFile = $result->args['<firstFile>'];
+        $secondFile = $result->args['<secondFile>'];
+        $format = $result->args['--format'];
 
-    line();
-    line(Differ\genDiff($firstFile, $secondFile, $format));
-    line();
+        line();
+        line(Differ\genDiff($firstFile, $secondFile, $format));
+        line();
+    } catch (\Exception $e) {
+        echo "Message: " . $e->getMessage();
+    }
 }

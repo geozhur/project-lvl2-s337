@@ -2,19 +2,16 @@
 namespace GenDiff\Parsers;
 
 use Symfony\Component\Yaml\Yaml;
+use Exception;
 
 function parse($content, $format)
 {
-    try {
-        switch ($format) {
-            case 'json':
-                return json_decode($content);
-            case 'yaml':
-                return Yaml::parse($content, Yaml::PARSE_OBJECT_FOR_MAP);
-            default:
-                throw new Exception('Unable to parse the string');
-        }
-    } catch (ParseException $e) {
-        echo "Error: " , $e->getMessage();
+    switch ($format) {
+        case 'json':
+            return json_decode($content);
+        case 'yaml':
+            return Yaml::parse($content, Yaml::PARSE_OBJECT_FOR_MAP);
+        default:
+            throw new \Exception("Unable parse to string\n");
     }
 }

@@ -20,9 +20,9 @@
             "src/Cli.php",
             "src/Parsers.php",
             "src/Differ.php",
-            "src/Plain.php",
-            "src/Json.php",
-            "src/Tree.php"
+            "src/Formatters/Plain.php",
+            "src/Formatters/Json.php",
+            "src/Formatters/Tree.php"
         ]
     },
     "bin": [

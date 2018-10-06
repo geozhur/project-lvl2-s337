@@ -12,13 +12,11 @@ function render($ast)
                     return "Property '{$path}{$item->key}' was changed. " .
                            "From '{$item->value}' to '{$item->newValue}'\n";
                 case 'add':
-                case 'addNode':
                     $value = $item->value === '' ? 'complex value' : $item->value;
                     return "Property '{$path}{$item->key}' was added with value: '{$value}'\n";
                 case 'removed':
-                case 'removedNode':
                     return "Property '{$path}{$item->key}' was removed\n";
-                case 'notChangedNode':
+                case 'node':
                     return  $getPlainIter($item->children, "{$path}{$item->key}.");
             }
         }, $ast));

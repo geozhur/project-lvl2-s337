@@ -1,7 +1,7 @@
 [
    {
    "key": "common",
-   "type": "notChangedNode",
+   "type": "node",
    "value": "",
    "newValue": "",
    "children": [
@@ -28,7 +28,7 @@
        },
        {
        "key": "setting6",
-       "type": "removedNode",
+       "type": "removed",
        "value": "",
        "newValue": "",
        "children": [
@@ -50,7 +50,7 @@
        },
        {
        "key": "setting5",
-       "type": "addNode",
+       "type": "add",
        "value": "",
        "newValue": "",
        "children": [
@@ -67,7 +67,7 @@
    },
    {
    "key": "group1",
-   "type": "notChangedNode",
+   "type": "node",
    "value": "",
    "newValue": "",
    "children": [
@@ -89,7 +89,7 @@
    },
    {
    "key": "group2",
-   "type": "removedNode",
+   "type": "removed",
    "value": "",
    "newValue": "",
    "children": [
@@ -104,7 +104,7 @@
    },
    {
    "key": "group3",
-   "type": "addNode",
+   "type": "add",
    "value": "",
    "newValue": "",
    "children": [
