@@ -2,86 +2,74 @@
     {
         "key": "common",
         "type": "node",
-        "value": "",
+        "oldValue": "",
         "newValue": "",
         "children": [
             {
                 "key": "setting1",
                 "type": "notChanged",
-                "value": "Value 1",
+                "oldValue": "Value 1",
                 "newValue": "",
                 "children": ""
             },
             {
                 "key": "setting2",
                 "type": "removed",
-                "value": "200",
+                "oldValue": "200",
                 "newValue": "",
                 "children": ""
             },
             {
                 "key": "setting3",
                 "type": "notChanged",
-                "value": "true",
+                "oldValue": true,
                 "newValue": "",
                 "children": ""
             },
             {
                 "key": "setting6",
                 "type": "removed",
-                "value": "",
-                "newValue": "",
-                "children": [
-                    {
-                        "key": "key",
-                        "type": "notChanged",
-                        "value": "value",
-                        "newValue": "",
-                        "children": ""
-                    }
-                ]
-            },
-            {
-                "key": "setting4",
-                "type": "add",
-                "value": "blah blah",
+                "oldValue": {
+                    "key": "value"
+                },
                 "newValue": "",
                 "children": ""
             },
             {
+                "key": "setting4",
+                "type": "added",
+                "oldValue": "",
+                "newValue": "blah blah",
+                "children": ""
+            },
+            {
                 "key": "setting5",
-                "type": "add",
-                "value": "",
-                "newValue": "",
-                "children": [
-                    {
-                        "key": "key5",
-                        "type": "notChanged",
-                        "value": "value5",
-                        "newValue": "",
-                        "children": ""
-                    }
-                ]
+                "type": "added",
+                "oldValue": "",
+                "newValue": {
+                    "key5": "value5"
+                },
+                "children": ""
             }
         ]
     },
     {
         "key": "group1",
         "type": "node",
-        "value": "",
+        "oldValue": "",
         "newValue": "",
         "children": [
             {
                 "key": "baz",
                 "type": "changed",
-                "value": "bas",
+                "oldValue": "bas",
                 "newValue": "bars",
                 "children": ""
             },
             {
                 "key": "foo",
                 "type": "notChanged",
-                "value": "bar",
+                "oldValue": "bar",
                 "newValue": "",
                 "children": ""
             }
@@ -90,31 +78,19 @@
     {
         "key": "group2",
         "type": "removed",
-        "value": "",
+        "oldValue": {
+            "abc": "12345"
+        },
         "newValue": "",
-        "children": [
-            {
-                "key": "abc",
-                "type": "notChanged",
-                "value": "12345",
-                "newValue": "",
-                "children": ""
-            }
-        ]
+        "children": ""
     },
     {
         "key": "group3",
-        "type": "add",
-        "value": "",
-        "newValue": "",
-        "children": [
-            {
-                "key": "fee",
-                "type": "notChanged",
-                "value": "100500",
-                "newValue": "",
-                "children": ""
-            }
-        ]
+        "type": "added",
+        "oldValue": "",
+        "newValue": {
+            "fee": "100500"
+        },
+        "children": ""
     }
 ]

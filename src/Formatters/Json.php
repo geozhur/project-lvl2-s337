@@ -1,32 +1,67 @@
 <?php
 namespace Formatters\Json;
 
+/*
 function render($ast)
 {
     return json_encode($ast, JSON_PRETTY_PRINT);
-}
-/*
+}*/
 
-function render($ast)
+function encode($data)
 {
-    $getJsonIter = function ($begin, $ast, $end, $spaces) use (&$getJsonIter) {
-        $result = array_map(function ($item) use ($begin, $end, $spaces, &$getJsonIter) {
+    return json_encode($data);
+}
+
+function stringify($obj, $spaces)
+{
+    if (!is_object($obj)) {
+        return encode($obj);
+    }
+
+    $stringifyIter = function ($obj, $spaces) use (&$stringifyIter) {
+        $arr = get_object_vars($obj);
+        $keys = array_keys($arr);
+
+        $result = array_map(function ($elem) use ($spaces, $arr) {
+            if ($elem ==='value' && is_object($arr[$elem])) {
+                $tree = $stringifyIter($arr[$elem], "    {$spaces}");
+            }
+            $value = encode($arr[$elem]);
+            return "{$spaces}    \"{$elem}\": {$value}";
+        }, $keys);
+        return implode("\n", array_merge(['{'], $result, ["{$spaces}}"]));
+    };
+    return $stringifyIter($obj, $spaces);
+}
+
+function render($ast, $spaces = '')
+{
+        $result = array_map(function ($item) use ($spaces) {
             $itemArr = (array)$item;
             $itemKeys =  array_keys($itemArr);
-                $node = array_map(function ($elem) use ($spaces, $itemArr, $begin, $end, &$getJsonIter) {
-                    if ($elem ==='children' && $itemArr[$elem]) {
-                        $tree = $getJsonIter($begin, $itemArr[$elem], "    {$end}", "    {$spaces}");
-                        return "{$spaces}\"{$elem}\": {$tree}";
-                    }
-                    return "{$spaces}\"{$elem}\": \"{$itemArr[$elem]}\"";
-                }, $itemKeys);
+            $type = $item->type;
+
+            $node = array_map(function ($elem) use ($spaces, $type, $itemArr) {
+                if ($elem ==='children' && $type == 'node') {
+                    $tree = render($itemArr[$elem],"      {$spaces}");
+                    return "    {$spaces}\"{$elem}\": {$tree}";
+                } 
+                if ($elem === 'newValue'&& $type == 'added') {
+                    $newVal = stringify($itemArr[$elem], "    {$spaces}");
+                    return "    {$spaces}\"{$elem}\": {$newVal}";
+                }
+                if ($elem === 'oldValue' && $type == 'removed') {
+                    $oldVal = stringify($itemArr[$elem], "    {$spaces}");
+                    return "    {$spaces}\"{$elem}\": {$oldVal}";
+                }
+                $value = encode($itemArr[$elem]);
+                return "    {$spaces}\"{$elem}\": {$value}";
+            }, $itemKeys);
+
             $strNode = implode(",\n", $node);
-            return "{$spaces}{\n{$strNode}\n{$spaces}}";
+            return "  {$spaces}{\n{$strNode}\n  {$spaces}}";
         }, $ast);
 
         $strResult = implode(",\n", array_merge($result));
-        return "{$begin}\n{$strResult}\n{$end}";
-    };
-    return $getJsonIter('[', $ast, ']', "   ");
+        return "[\n{$strResult}\n{$spaces}]";
 }
-*/

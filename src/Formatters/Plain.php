@@ -6,21 +6,36 @@ use \Funct\Collection;
 function render($ast)
 {
     $getPlainIter = function ($ast, $path) use (&$getPlainIter) {
-        $result = Collection\flattenAll(array_map(function ($item) use ($path, &$getPlainIter) {
-            switch ($item->type) {
-                case 'changed':
-                    return "Property '{$path}{$item->key}' was changed. " .
-                           "From '{$item->value}' to '{$item->newValue}'\n";
-                case 'added':
-                    $value = is_object($item->value) ? 'complex value' : $item->value;
-                    return "Property '{$path}{$item->key}' was added with value: '{$value}'\n";
-                case 'removed':
-                    return "Property '{$path}{$item->key}' was removed\n";
-                case 'node':
-                    return  $getPlainIter($item->children, "{$path}{$item->key}.");
+        $result = Collection\flattenAll(array_map(function ($node) use ($path, &$getPlainIter) {
+            if ($node->type == 'node') {
+                return $getPlainIter($node->children, "{$path}{$node->key}.");
+            } else {
+                $oldValue = is_object($node->oldValue) ? 'complex value' : $node->oldValue;
+                $newValue = is_object($node->newValue) ? 'complex value' : $node->newValue;
+                return (object)[
+                    'type' => $node->type,
+                    'path' => "{$path}{$node->key}",
+                    'key' => $node->key,
+                    'oldValue' => $oldValue,
+                    'newValue' => $newValue,
+                ];
             }
         }, $ast));
         return $result;
     };
-    return trim(implode("", $getPlainIter($ast, '')));
+    $result1 = array_filter($getPlainIter($ast, ''), function ($node) {
+        return $node->type!=='notChanged';
+    });
+    $result2 = array_map(function ($node) {
+        switch ($node->type) {
+            case 'changed':
+                return "Property '{$node->path}' was changed. From '{$node->oldValue}' to '{$node->newValue}'";
+            case 'added':
+                return "Property '{$node->path}' was added with value: '{$node->newValue}'";
+            case 'removed':
+                return "Property '{$node->path}' was removed";
+        }
+    }, $result1);
+
+    return implode("\n", $result2);
 }

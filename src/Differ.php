@@ -9,11 +9,11 @@ function encode($data)
     return trim(json_encode($data), '" ');
 }
 
-function node($type, $key, $value, $children = '', $newValue = '')
+function node($type, $key, $children = '',  $oldValue = '', $newValue = '')
 {
         return (object)['key' => $key,
                         'type' => $type,
-                        'value' => $value,
+                        'oldValue' => $oldValue,
                         'newValue' => $newValue,
                         'children' => $children];
 }
@@ -32,25 +32,35 @@ function genAstDiff($content1, $content2)
         $keyInArr2 = array_key_exists($key, $arr2);
 
         if (is_object($arr1[$key]) && is_object($arr2[$key])) {
-            return node('node', $key, '', genAstDiff($arr1[$key], $arr2[$key]));
+            return node('node', $key, genAstDiff($arr1[$key], $arr2[$key]));
         }
         if ($keyInArr1 && $keyInArr2) {
             if ($arr1[$key] === $arr2[$key]) {
-                return node('notChanged', $key, $arr1[$key]);
+                return node('notChanged', $key, '', $arr1[$key]);
             }
             if ($arr1[$key]!== $arr2[$key]) {
-                return node('changed', $key, $arr1[$key], '', $arr2[$key]);
+                return node('changed', $key, '', $arr1[$key], $arr2[$key]);
             }
         }
         if ($keyInArr1 && !$keyInArr2) {
-                return node('removed', $key, $arr1[$key]);
+                return node('removed', $key, '', $arr1[$key]);
         }
         if (!$keyInArr1 && $keyInArr2) {
-                return node('added', $key, $arr2[$key]);
+                return node('added', $key, '', '', $arr2[$key]);
         }
     }, $keys));
 
     return  $result;
+}
+
+function runRender($format, $astDiff)
+{
+    $render = "\\Formatters\\".ucfirst($format)."\\render";
+    if (function_exists($render)) {
+        return $render($astDiff);
+    } else {
+        return \Formatters\Tree\render($astDiff);
+    }
 }
 
 function genDiff($pathToFile1, $pathToFile2, $format = 'pretty')
@@ -70,11 +80,5 @@ function genDiff($pathToFile1, $pathToFile2, $format = 'pretty')
 
     $astDiff = genAstDiff($contentForExt1, $contentForExt2);
 
-    $render = "\\Formatters\\".ucfirst($format)."\\render";
-
-    if (function_exists($render)) {
-        return $render($astDiff);
-    } else {
-        return \Formatters\Tree\render($astDiff);
-    }
+    return runRender($format, $astDiff);
 }
