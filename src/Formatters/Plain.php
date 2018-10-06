@@ -11,8 +11,8 @@ function render($ast)
                 case 'changed':
                     return "Property '{$path}{$item->key}' was changed. " .
                            "From '{$item->value}' to '{$item->newValue}'\n";
-                case 'add':
-                    $value = $item->value === '' ? 'complex value' : $item->value;
+                case 'added':
+                    $value = is_object($item->value) ? 'complex value' : $item->value;
                     return "Property '{$path}{$item->key}' was added with value: '{$value}'\n";
                 case 'removed':
                     return "Property '{$path}{$item->key}' was removed\n";

@@ -1,12 +1,11 @@
 <?php
 namespace Formatters\Json;
 
-/*
 function render($ast)
 {
     return json_encode($ast, JSON_PRETTY_PRINT);
 }
-*/
+/*
 
 function render($ast)
 {
@@ -24,9 +23,10 @@ function render($ast)
             $strNode = implode(",\n", $node);
             return "{$spaces}{\n{$strNode}\n{$spaces}}";
         }, $ast);
-     
+
         $strResult = implode(",\n", array_merge($result));
         return "{$begin}\n{$strResult}\n{$end}";
     };
     return $getJsonIter('[', $ast, ']', "   ");
 }
+*/

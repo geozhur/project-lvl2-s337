@@ -30,30 +30,23 @@ function genAstDiff($content1, $content2)
         
         $keyInArr1 = array_key_exists($key, $arr1);
         $keyInArr2 = array_key_exists($key, $arr2);
+
+        if (is_object($arr1[$key]) && is_object($arr2[$key])) {
+            return node('node', $key, '', genAstDiff($arr1[$key], $arr2[$key]));
+        }
         if ($keyInArr1 && $keyInArr2) {
-            if (is_object($arr1[$key]) && is_object($arr2[$key])) {
-                return node('node', $key, '', genAstDiff($arr1[$key], $arr2[$key]));
-            }
             if ($arr1[$key] === $arr2[$key]) {
-                return node('notChanged', $key, encode($arr1[$key]));
+                return node('notChanged', $key, $arr1[$key]);
             }
             if ($arr1[$key]!== $arr2[$key]) {
-                return node('changed', $key, encode($arr1[$key]), '', encode($arr2[$key]));
+                return node('changed', $key, $arr1[$key], '', $arr2[$key]);
             }
         }
         if ($keyInArr1 && !$keyInArr2) {
-            if (!is_object($arr1[$key])) {
-                return node('removed', $key, encode($arr1[$key]));
-            } else {
-                return node('removed', $key, '', genAstDiff($arr1[$key], $arr1[$key]));
-            }
+                return node('removed', $key, $arr1[$key]);
         }
         if (!$keyInArr1 && $keyInArr2) {
-            if (!is_object($arr2[$key])) {
-                return node('add', $key, encode($arr2[$key]));
-            } else {
-                return node('add', $key, '', genAstDiff($arr2[$key], $arr2[$key]));
-            }
+                return node('added', $key, $arr2[$key]);
         }
     }, $keys));
 
