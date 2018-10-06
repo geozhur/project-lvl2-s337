@@ -4,10 +4,6 @@ namespace GenDiff\Differ;
 use \Funct\Collection;
 use Exception;
 
-class NotOpenFileException extends \Exception
-{
-};
-
 function encode($data)
 {
     switch (gettype($data)) {
