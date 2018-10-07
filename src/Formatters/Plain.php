@@ -6,7 +6,7 @@ use function GenDiff\Differ\encode as encode;
 
 function stringify($obj)
 {
-    return is_object($obj) ? 'complex value' : encode($obj); 
+    return is_object($obj) ? 'complex value' : encode($obj);
 }
 
 function render($ast, $path = '')
