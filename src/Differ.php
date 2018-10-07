@@ -26,6 +26,7 @@ function stringify($obj, $spaces, $quotes = false)
         $result = array_map(function ($elem) use ($spaces, $arr, $quotes) {
             if (is_object($arr[$elem])) {
                 $tree = $stringifyIter($arr[$elem], "    {$spaces}");
+                return "{$spaces}    {$key}: {$tree}";
             }
             $value = encode($arr[$elem], $quotes);
             $key = encode($elem, $quotes);
@@ -34,15 +35,6 @@ function stringify($obj, $spaces, $quotes = false)
         return implode("\n", array_merge(['{'], $result, ["{$spaces}}"]));
     };
     return $stringifyIter($obj, $spaces);
-}
-
-function node($type, $key, $children = '', $oldValue = '', $newValue = '')
-{
-        return (object)['key' => $key,
-                        'type' => $type,
-                        'oldValue' => $oldValue,
-                        'newValue' => $newValue,
-                        'children' => $children];
 }
 
 function genAstDiff($content1, $content2)
@@ -59,21 +51,39 @@ function genAstDiff($content1, $content2)
         $keyInArr2 = array_key_exists($key, $arr2);
 
         if (!empty($arr1[$key]) && !empty($arr2[$key]) && is_object($arr1[$key]) && is_object($arr2[$key])) {
-            return node('node', $key, genAstDiff($arr1[$key], $arr2[$key]));
+            return (object)['key' => $key,
+                            'type' => 'node',
+                            'oldValue' => "",
+                            'newValue' => "",
+                            'children' => genAstDiff($arr1[$key], $arr2[$key])];
         }
-        if ($keyInArr1 && $keyInArr2) {
-            if ($arr1[$key] === $arr2[$key]) {
-                return node('notChanged', $key, '', $arr1[$key]);
-            }
-            if ($arr1[$key]!== $arr2[$key]) {
-                return node('changed', $key, '', $arr1[$key], $arr2[$key]);
-            }
+        if ($keyInArr1 && $keyInArr2 && $arr1[$key] === $arr2[$key]) {
+            return (object)['key' => $key,
+                            'type' => 'notChanged',
+                            'oldValue' => $arr1[$key],
+                            'newValue' => "",
+                            'children' => ""];
+        }
+        if ($keyInArr1 && $keyInArr2 && $arr1[$key]!== $arr2[$key]) {
+            return (object)['key' => $key,
+                            'type' => 'changed',
+                            'oldValue' => $arr1[$key],
+                            'newValue' => $arr2[$key],
+                            'children' => ''];
         }
         if ($keyInArr1 && !$keyInArr2) {
-                return node('removed', $key, '', $arr1[$key]);
+            return (object)['key' => $key,
+                            'type' => 'removed',
+                            'oldValue' => $arr1[$key],
+                            'newValue' => "",
+                            'children' => ""];
         }
         if (!$keyInArr1 && $keyInArr2) {
-                return node('added', $key, '', '', $arr2[$key]);
+            return (object)['key' => $key,
+                            'type' => 'added',
+                            'oldValue' => "",
+                            'newValue' => $arr2[$key],
+                            'children' => ""];
         }
     }, $keys));
 

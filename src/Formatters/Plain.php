@@ -4,39 +4,27 @@ namespace Formatters\Plain;
 use \Funct\Collection;
 use function GenDiff\Differ\encode as encode;
 
-function render($ast)
+function render($ast, $path = '')
 {
-    $getPlainIter = function ($ast, $path) use (&$getPlainIter) {
-        $result = Collection\flattenAll(array_map(function ($node) use ($path, &$getPlainIter) {
-            if ($node->type == 'node') {
-                return $getPlainIter($node->children, "{$path}{$node->key}.");
-            } else {
-                $oldValue = is_object($node->oldValue) ? 'complex value' : encode($node->oldValue);
-                $newValue = is_object($node->newValue) ? 'complex value' : encode($node->newValue);
-                return (object)[
-                    'type' => $node->type,
-                    'path' => "{$path}{$node->key}",
-                    'key' => $node->key,
-                    'oldValue' => $oldValue,
-                    'newValue' => $newValue,
-                ];
+    $result = Collection\flattenAll(array_reduce($ast, function ($acc, $node) use ($path) {
+        if ($node->type == 'node') {
+            return [$acc, render($node->children, "{$path}{$node->key}.")];
+        } else {
+            if ($node->type == 'removed') {
+                return [$acc, "Property '{$path}{$node->key}' was removed"];
             }
-        }, $ast));
-        return $result;
-    };
-    $result1 = array_filter($getPlainIter($ast, ''), function ($node) {
-        return $node->type!=='notChanged';
-    });
-    $result2 = array_map(function ($node) {
-        switch ($node->type) {
-            case 'changed':
-                return "Property '{$node->path}' was changed. From '{$node->oldValue}' to '{$node->newValue}'";
-            case 'added':
-                return "Property '{$node->path}' was added with value: '{$node->newValue}'";
-            case 'removed':
-                return "Property '{$node->path}' was removed";
+            if ($node->type == 'added') {
+                $newValue = is_object($node->newValue) ? 'complex value' : encode($node->newValue);
+                return [$acc, "Property '{$path}{$node->key}' was added with value: '{$newValue}'"];
+            }
+            if ($node->type == 'changed') {
+                $oldValueChanged = encode($node->oldValue);
+                $newValueChanged = encode($node->newValue);
+                return [$acc, "Property '{$path}{$node->key}' was changed. ".
+                              "From '{$oldValueChanged}' to '{$newValueChanged}'"];
+            }
         }
-    }, $result1);
-
-    return implode("\n", $result2);
+        return $acc;
+    }, []));
+    return implode("\n", $result);
 }

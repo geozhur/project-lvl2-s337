@@ -12,7 +12,7 @@
     "scripts": {
         "phpcs": "phpcs",
         "phpcbf": "phpcbf",
-        "phpunit": "phpunit",
+        "phpunit": "phpunit --colors=always",
         "test": "phpunit tests"
     },
     "autoload": {
