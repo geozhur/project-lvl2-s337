@@ -1,8 +1,10 @@
 <?php
 namespace Formatters\Json;
 
+/*
 use function GenDiff\Differ\encode as encode;
 use function GenDiff\Differ\encode as stringify;
+*/
 
 function render($ast)
 {
