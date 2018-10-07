@@ -4,6 +4,11 @@ namespace Formatters\Plain;
 use \Funct\Collection;
 use function GenDiff\Differ\encode as encode;
 
+function stringify($obj)
+{
+    return is_object($obj) ? 'complex value' : encode($obj); 
+}
+
 function render($ast, $path = '')
 {
     $result = Collection\flattenAll(array_reduce($ast, function ($acc, $node) use ($path) {
@@ -14,12 +19,12 @@ function render($ast, $path = '')
                 return [$acc, "Property '{$path}{$node->key}' was removed"];
             }
             if ($node->type == 'added') {
-                $newValue = is_object($node->newValue) ? 'complex value' : encode($node->newValue);
+                $newValue = stringify($node->newValue);
                 return [$acc, "Property '{$path}{$node->key}' was added with value: '{$newValue}'"];
             }
             if ($node->type == 'changed') {
-                $oldValueChanged = encode($node->oldValue);
-                $newValueChanged = encode($node->newValue);
+                $oldValueChanged = stringify($node->oldValue);
+                $newValueChanged = stringify($node->newValue);
                 return [$acc, "Property '{$path}{$node->key}' was changed. ".
                               "From '{$oldValueChanged}' to '{$newValueChanged}'"];
             }
