@@ -2,6 +2,7 @@
 namespace Formatters\Plain;
 
 use \Funct\Collection;
+use function GenDiff\Differ\encode as encode;
 
 function render($ast)
 {
@@ -10,8 +11,8 @@ function render($ast)
             if ($node->type == 'node') {
                 return $getPlainIter($node->children, "{$path}{$node->key}.");
             } else {
-                $oldValue = is_object($node->oldValue) ? 'complex value' : $node->oldValue;
-                $newValue = is_object($node->newValue) ? 'complex value' : $node->newValue;
+                $oldValue = is_object($node->oldValue) ? 'complex value' : encode($node->oldValue);
+                $newValue = is_object($node->newValue) ? 'complex value' : encode($node->newValue);
                 return (object)[
                     'type' => $node->type,
                     'path' => "{$path}{$node->key}",

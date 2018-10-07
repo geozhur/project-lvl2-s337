@@ -4,9 +4,36 @@ namespace GenDiff\Differ;
 use \Funct\Collection;
 use Exception;
 
-function encode($data)
+function encode($data, $quotes = false)
 {
-    return trim(json_encode($data), '" ');
+    if (!$quotes) {
+        return trim(json_encode($data), '" ');
+    } else {
+        return json_encode($data);
+    }
+}
+
+function stringify($obj, $spaces, $quotes = false)
+{
+    if (!is_object($obj)) {
+        return encode($obj, $quotes);
+    }
+
+    $stringifyIter = function ($obj, $spaces) use (&$stringifyIter, $quotes) {
+        $arr = get_object_vars($obj);
+        $keys = array_keys($arr);
+
+        $result = array_map(function ($elem) use ($spaces, $arr, $quotes) {
+            if (is_object($arr[$elem])) {
+                $tree = $stringifyIter($arr[$elem], "    {$spaces}");
+            }
+            $value = encode($arr[$elem], $quotes);
+            $key = encode($elem, $quotes);
+            return "{$spaces}    {$key}: {$value}";
+        }, $keys);
+        return implode("\n", array_merge(['{'], $result, ["{$spaces}}"]));
+    };
+    return $stringifyIter($obj, $spaces);
 }
 
 function node($type, $key, $children = '', $oldValue = '', $newValue = '')

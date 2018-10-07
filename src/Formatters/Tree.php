@@ -1,28 +1,7 @@
 <?php
 namespace Formatters\Tree;
 
-use function GenDiff\Differ\encode as encode;
-
-function stringify($obj, $spaces)
-{
-    if (!is_object($obj)) {
-        return encode($obj);
-    }
-
-    $stringifyIter = function ($obj, $spaces) use (&$stringifyIter) {
-        $arr = get_object_vars($obj);
-        $keys = array_keys($arr);
-
-        $result = array_map(function ($elem) use ($spaces, $arr) {
-            if (is_object($arr[$elem])) {
-                $tree = $stringifyIter($arr[$elem], "    {$spaces}");
-            }
-            return "{$spaces}    {$elem}: {$arr[$elem]}";
-        }, $keys);
-        return implode("\n", array_merge(['{'], $result, ["{$spaces}}"]));
-    };
-    return $stringifyIter($obj, $spaces);
-}
+use function GenDiff\Differ\stringify as stringify;
 
 function render($ast, $spaces = "")
 {
