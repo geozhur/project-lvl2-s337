@@ -23,7 +23,7 @@ function stringify($obj, $level)
 
         $result = array_map(function ($elem) use ($spaces, $level, $arr) {
             if (is_object($arr[$elem])) {
-                $tree = $stringifyIter($arr[$elem], $level+1);
+                $tree = $stringifyIter($arr[$elem], $level + 1);
                 return "{$spaces}    {$key}: {$tree}";
             }
             $value = encode($arr[$elem]);

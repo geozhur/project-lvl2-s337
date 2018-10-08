@@ -15,25 +15,25 @@ function genAstDiff($content1, $content2)
     $result = Collection\flattenAll(array_map(function ($key) use ($arr1, $arr2) {
 
         $keyOfNode = ['key' => $key ];
-        
-        if (!empty($arr1[$key]) && !empty($arr2[$key]) && is_object($arr1[$key]) && is_object($arr2[$key])) {
-            $partOfNode = ['type' => 'node','children' => genAstDiff($arr1[$key], $arr2[$key])];
-        } else {
-            $keyInArr1 = array_key_exists($key, $arr1);
-            $keyInArr2 = array_key_exists($key, $arr2);
 
+        $keyInArr1 = array_key_exists($key, $arr1);
+        $keyInArr2 = array_key_exists($key, $arr2);
+
+        if ($keyInArr1 && $keyInArr2 && is_object($arr1[$key]) && is_object($arr2[$key])) {
+            $partOfNode = ['type' => 'node', 'children' => genAstDiff($arr1[$key], $arr2[$key])];
+        } else {
             if ($keyInArr1) {
                 if ($keyInArr2) {
-                    if ($arr1[$key]!== $arr2[$key]) {
-                        $partOfNode = ['type' => 'changed','oldValue' => $arr1[$key],'newValue' => $arr2[$key]];
+                    if ($arr1[$key] !== $arr2[$key]) {
+                        $partOfNode = ['type' => 'changed', 'oldValue' => $arr1[$key], 'newValue' => $arr2[$key]];
                     } elseif ($arr1[$key] === $arr2[$key]) {
-                        $partOfNode = ['type' => 'notChanged','oldValue' => $arr1[$key]];
+                        $partOfNode = ['type' => 'notChanged', 'oldValue' => $arr1[$key]];
                     }
                 } elseif (!$keyInArr2) {
-                    $partOfNode = ['type' => 'removed','oldValue' => $arr1[$key]];
+                    $partOfNode = ['type' => 'removed', 'oldValue' => $arr1[$key]];
                 }
             } elseif (!$keyInArr1 && $keyInArr2) {
-                $partOfNode = ['type' => 'added','newValue' => $arr2[$key]];
+                $partOfNode = ['type' => 'added', 'newValue' => $arr2[$key]];
             }
         }
         return (object)array_merge($keyOfNode, $partOfNode);
@@ -44,7 +44,7 @@ function genAstDiff($content1, $content2)
 
 function runRender($format, $astDiff)
 {
-    $render = "\\Formatters\\".ucfirst($format)."\\render";
+    $render = "\\Formatters\\" . ucfirst($format) . "\\render";
     if (function_exists($render)) {
         return $render($astDiff);
     } else {
