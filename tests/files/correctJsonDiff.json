@@ -2,76 +2,57 @@
     {
         "key": "common",
         "type": "node",
-        "oldValue": "",
-        "newValue": "",
         "children": [
             {
                 "key": "setting1",
                 "type": "notChanged",
-                "oldValue": "Value 1",
-                "newValue": "",
-                "children": ""
+                "oldValue": "Value 1"
             },
             {
                 "key": "setting2",
                 "type": "removed",
-                "oldValue": "200",
-                "newValue": "",
-                "children": ""
+                "oldValue": "200"
             },
             {
                 "key": "setting3",
                 "type": "notChanged",
-                "oldValue": true,
-                "newValue": "",
-                "children": ""
+                "oldValue": true
             },
             {
                 "key": "setting6",
                 "type": "removed",
                 "oldValue": {
                     "key": "value"
-                },
-                "newValue": "",
-                "children": ""
+                }
             },
             {
                 "key": "setting4",
                 "type": "added",
-                "oldValue": "",
-                "newValue": "blah blah",
-                "children": ""
+                "newValue": "blah blah"
             },
             {
                 "key": "setting5",
                 "type": "added",
-                "oldValue": "",
                 "newValue": {
                     "key5": "value5"
-                },
-                "children": ""
+                }
             }
         ]
     },
     {
         "key": "group1",
         "type": "node",
-        "oldValue": "",
-        "newValue": "",
         "children": [
             {
                 "key": "baz",
                 "type": "changed",
                 "oldValue": "bas",
-                "newValue": "bars",
-                "children": ""
+                "newValue": "bars"
             },
             {
                 "key": "foo",
                 "type": "notChanged",
-                "oldValue": "bar",
-                "newValue": "",
-                "children": ""
+                "oldValue": "bar"
             }
         ]
     },
@@ -80,17 +61,13 @@
         "type": "removed",
         "oldValue": {
             "abc": "12345"
-        },
-        "newValue": "",
-        "children": ""
+        }
     },
     {
         "key": "group3",
         "type": "added",
-        "oldValue": "",
         "newValue": {
             "fee": "100500"
-        },
-        "children": ""
+        }
     }
 ]

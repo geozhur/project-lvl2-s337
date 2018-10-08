@@ -2,32 +2,29 @@
 namespace Formatters\Plain;
 
 use \Funct\Collection;
-use function GenDiff\Differ\encode as encode;
 
 function stringify($obj)
 {
-    return is_object($obj) ? 'complex value' : encode($obj);
+    return is_object($obj) ? 'complex value' : trim(json_encode($obj), '" ');
+    ;
 }
 
 function render($ast, $path = '')
 {
     $result = Collection\flattenAll(array_reduce($ast, function ($acc, $node) use ($path) {
-        if ($node->type == 'node') {
-            return [$acc, render($node->children, "{$path}{$node->key}.")];
-        } else {
-            if ($node->type == 'removed') {
+        switch ($node->type) {
+            case 'node':
+                return [$acc, render($node->children, "{$path}{$node->key}.")];
+            case 'removed':
                 return [$acc, "Property '{$path}{$node->key}' was removed"];
-            }
-            if ($node->type == 'added') {
+            case 'added':
                 $newValue = stringify($node->newValue);
                 return [$acc, "Property '{$path}{$node->key}' was added with value: '{$newValue}'"];
-            }
-            if ($node->type == 'changed') {
-                $oldValueChanged = stringify($node->oldValue);
-                $newValueChanged = stringify($node->newValue);
+            case 'changed':
+                $oldValue = stringify($node->oldValue);
+                $newValue = stringify($node->newValue);
                 return [$acc, "Property '{$path}{$node->key}' was changed. ".
-                              "From '{$oldValueChanged}' to '{$newValueChanged}'"];
-            }
+                              "From '{$oldValue}' to '{$newValue}'"];
         }
         return $acc;
     }, []));

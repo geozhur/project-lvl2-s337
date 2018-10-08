@@ -4,39 +4,6 @@ namespace GenDiff\Differ;
 use \Funct\Collection;
 use Exception;
 
-function encode($data, $quotes = false)
-{
-    if (!$quotes) {
-        return trim(json_encode($data), '" ');
-    } else {
-        return json_encode($data);
-    }
-}
-
-function stringify($obj, $spaces, $quotes = false)
-{
-    if (!is_object($obj)) {
-        return encode($obj, $quotes);
-    }
-
-    $stringifyIter = function ($obj, $spaces) use (&$stringifyIter, $quotes) {
-        $arr = get_object_vars($obj);
-        $keys = array_keys($arr);
-
-        $result = array_map(function ($elem) use ($spaces, $arr, $quotes) {
-            if (is_object($arr[$elem])) {
-                $tree = $stringifyIter($arr[$elem], "    {$spaces}");
-                return "{$spaces}    {$key}: {$tree}";
-            }
-            $value = encode($arr[$elem], $quotes);
-            $key = encode($elem, $quotes);
-            return "{$spaces}    {$key}: {$value}";
-        }, $keys);
-        return implode("\n", array_merge(['{'], $result, ["{$spaces}}"]));
-    };
-    return $stringifyIter($obj, $spaces);
-}
-
 function genAstDiff($content1, $content2)
 {
     $arr1 = get_object_vars($content1);
@@ -46,45 +13,30 @@ function genAstDiff($content1, $content2)
     $keys = array_unique(array_merge($keys1, $keys2));
 
     $result = Collection\flattenAll(array_map(function ($key) use ($arr1, $arr2) {
-        
-        $keyInArr1 = array_key_exists($key, $arr1);
-        $keyInArr2 = array_key_exists($key, $arr2);
 
+        $keyOfNode = ['key' => $key ];
+        
         if (!empty($arr1[$key]) && !empty($arr2[$key]) && is_object($arr1[$key]) && is_object($arr2[$key])) {
-            return (object)['key' => $key,
-                            'type' => 'node',
-                            'oldValue' => "",
-                            'newValue' => "",
-                            'children' => genAstDiff($arr1[$key], $arr2[$key])];
+            $partOfNode = ['type' => 'node','children' => genAstDiff($arr1[$key], $arr2[$key])];
+        } else {
+            $keyInArr1 = array_key_exists($key, $arr1);
+            $keyInArr2 = array_key_exists($key, $arr2);
+
+            if ($keyInArr1) {
+                if ($keyInArr2) {
+                    if ($arr1[$key]!== $arr2[$key]) {
+                        $partOfNode = ['type' => 'changed','oldValue' => $arr1[$key],'newValue' => $arr2[$key]];
+                    } elseif ($arr1[$key] === $arr2[$key]) {
+                        $partOfNode = ['type' => 'notChanged','oldValue' => $arr1[$key]];
+                    }
+                } elseif (!$keyInArr2) {
+                    $partOfNode = ['type' => 'removed','oldValue' => $arr1[$key]];
+                }
+            } elseif (!$keyInArr1 && $keyInArr2) {
+                $partOfNode = ['type' => 'added','newValue' => $arr2[$key]];
+            }
         }
-        if ($keyInArr1 && $keyInArr2 && $arr1[$key] === $arr2[$key]) {
-            return (object)['key' => $key,
-                            'type' => 'notChanged',
-                            'oldValue' => $arr1[$key],
-                            'newValue' => "",
-                            'children' => ""];
-        }
-        if ($keyInArr1 && $keyInArr2 && $arr1[$key]!== $arr2[$key]) {
-            return (object)['key' => $key,
-                            'type' => 'changed',
-                            'oldValue' => $arr1[$key],
-                            'newValue' => $arr2[$key],
-                            'children' => ''];
-        }
-        if ($keyInArr1 && !$keyInArr2) {
-            return (object)['key' => $key,
-                            'type' => 'removed',
-                            'oldValue' => $arr1[$key],
-                            'newValue' => "",
-                            'children' => ""];
-        }
-        if (!$keyInArr1 && $keyInArr2) {
-            return (object)['key' => $key,
-                            'type' => 'added',
-                            'oldValue' => "",
-                            'newValue' => $arr2[$key],
-                            'children' => ""];
-        }
+        return (object)array_merge($keyOfNode, $partOfNode);
     }, $keys));
 
     return  $result;
