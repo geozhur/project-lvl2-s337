@@ -11,6 +11,28 @@ function stringify($obj)
 
 function render($ast, $path = '')
 {
+        $result = Collection\flattenAll(array_map(function ($node) use ($path) {
+            switch ($node->type) {
+                case 'changed':
+                    $oldValue = stringify($node->oldValue);
+                    $newValue = stringify($node->newValue);
+                    return "Property '{$path}{$node->key}' was changed. " .
+                           "From '{$oldValue}' to '{$newValue}'";
+                case 'added':
+                    $newValue = stringify($node->newValue);
+                    return "Property '{$path}{$node->key}' was added with value: '{$newValue}'";
+                case 'removed':
+                    return "Property '{$path}{$node->key}' was removed";
+                case 'node':
+                    return  render($node->children, "{$path}{$node->key}.");
+            }
+        }, $ast));
+
+        return implode("\n", array_filter($result));
+}
+/*
+function render($ast, $path = '')
+{
     $result = Collection\flattenAll(array_reduce($ast, function ($acc, $node) use ($path) {
         switch ($node->type) {
             case 'node':
@@ -29,4 +51,4 @@ function render($ast, $path = '')
         return $acc;
     }, []));
     return implode("\n", $result);
-}
+} */
